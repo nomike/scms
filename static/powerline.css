@@ -1,0 +1,166 @@
+/*
+Name: Powerline.css
+Author: @vivekascoder (Github/Facebook/Instagram/Gmail)
+Email: vivekascoder@gmail.com
+Website: https://github.com/vivekascoder/powerline.css
+*/
+
+:root{
+    --component-0-background-color: #FF9900; 
+    --component-1-background-color: #FF1B8D;
+    --component-2-background-color: #FFDA00;
+    --component-3-background-color: #1BB3FF;
+    --component-4-background-color: #FF1B8D;
+    --component-5-background-color: #FFDA00;
+    --component-6-background-color: #1BB3FF;
+    --component-7-background-color: #FF1B8D;
+    --component-8-background-color: #FFDA00;
+    --component-9-background-color: #1BB3FF;
+
+    --component-0-color-hover: #FFFFFF; 
+    --component-1-color-hover: #000000;
+    --component-2-color-hover: #FFFFFF;
+    --component-3-color-hover: #000000;
+    --component-4-color-hover: #000000;
+    --component-5-color-hover: #FFFFFF;
+    --component-6-color-hover: #000000;
+    --component-7-color-hover: #000000;
+    --component-8-color-hover: #FFFFFF;
+    --component-9-color-hover: #000000;
+
+
+    --component-0-color: black;
+    --component-1-color: white;
+    --component-2-color: black;
+    --component-3-color: white;
+    --component-4-color: white;
+    --component-5-color: black;
+    --component-6-color: white;
+    --component-7-color: white;
+    --component-8-color: black;
+    --component-9-color: white;
+}
+
+.powerline{
+    display: flex;
+    justify-content: left;
+    margin-top: 0;
+    background-color: #ff9900;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+}
+
+.powerline__component{
+    background-color: #ff9900;
+    /* font-size: 0.75rem; */
+    font-weight: 500;
+    position: relative;
+    padding: 3px 1.25rem;
+    margin-right: -14px;
+    cursor: pointer;
+    clip-path: polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 100% 100%, 0% 100%, 14px 50%);
+}
+
+.powerline__component {
+    text-decoration: none;
+}
+
+.powerline__component:nth-child(1), .powerline__component:nth-child(1)::after{
+    background-color: var(--component-0-background-color);
+    color: var(--component-0-color);
+    z-index: 10;
+}
+.powerline__component:hover:nth-child(1){
+    color: var(--component-0-color-hover);
+}
+
+.powerline__component:nth-child(2), .powerline__component:nth-child(2)::after{
+    background-color: var(--component-1-background-color);
+    color: var(--component-1-color);
+    z-index: 9;
+}
+.powerline__component:hover:nth-child(2){
+    color: var(--component-1-color-hover);
+}
+
+.powerline__component:nth-child(3), .powerline__component:nth-child(3)::after{
+    background-color: var(--component-2-background-color);
+    color: var(--component-2-color);
+    z-index: 8;
+}
+.powerline__component:hover:nth-child(3){
+    color: var(--component-2-color-hover);
+}
+
+.powerline__component:nth-child(4), .powerline__component:nth-child(4)::after{
+    background-color: var(--component-3-background-color);
+    color: var(--component-3-color);
+    z-index: 7
+}
+.powerline__component:hover:nth-child(4){
+    color: var(--component-3-color-hover);
+}
+
+.powerline__component:nth-child(5), .powerline__component:nth-child(5)::after{
+    background-color: var(--component-4-background-color);
+    color: var(--component-4-color);
+    z-index: 6;
+}
+.powerline__component:hover:nth-child(5){
+    color: var(--component-4-color-hover);
+}
+
+.powerline__component:nth-child(6), .powerline__component:nth-child(6)::after{
+    background-color: var(--component-5-background-color);
+    color: var(--component-5-color);
+    z-index: 5;
+}
+.powerline__component:hover:nth-child(6){
+    color: var(--component-5-color-hover);
+}
+
+.powerline__component:nth-child(7), .powerline__component:nth-child(7)::after{
+    background-color: var(--component-6-background-color);
+    color: var(--component-6-color);
+    z-index: 4;
+}
+.powerline__component:hover:nth-child(7){
+    color: var(--component-6-color-hover);
+}
+
+.powerline__component:nth-child(8), .powerline__component:nth-child(8)::after{
+    background-color: var(--component-7-background-color);
+    color: var(--component-7-color);
+    z-index: 3;
+}
+.powerline__component:hover:nth-child(8){
+    color: var(--component-7-color-hover);
+}
+
+.powerline__component:nth-child(9), .powerline__component:nth-child(9)::after{
+    background-color: var(--component-8-background-color);
+    color: var(--component-8-color);
+    z-index: 2;
+}
+.powerline__component:hover:nth-child(9){
+    color: var(--component-8-color-hover);
+}
+
+.powerline__component:nth-child(10), .powerline__component:nth-child(10)::after{
+    background-color: var(--component-9-background-color);
+    color: var(--component-9-color);
+    z-index: 1;
+}
+.powerline__component:hover:nth-child(10){
+    color: var(--component-9-color-hover);
+}
+
+.powerline__component::after{
+    content: '';
+    height: 100%;
+    width: 20px;
+    clip-path: polygon(0% 0%, 70% 50%, 0% 100%);
+    position: absolute;
+    transform: translate(0.95rem, -3px);
+}

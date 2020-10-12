@@ -1,0 +1,61 @@
+import os
+from flask import Flask
+import flask
+from io import StringIO
+import re
+import templatehelper
+import urllib.parse
+
+
+def create_app():
+    """
+    Factory for creating a Flask application.
+    """
+    app = Flask(__name__, instance_relative_config=True)
+    # paths sent by flask are relative to the "public" directory. This prefix should be added to get paths relative to the pages root directory.
+    pathprefix = 'public'
+    
+    @app.route('/<path:path>')
+    def serve_directory_or_file(path):
+        """
+        Main handler for all paths
+        """
+        path = urllib.parse.unquote(path)
+        fullpath = os.path.join(pathprefix, path)
+        if not os.path.exists(fullpath):
+            return "404"    # Todo: Write template for a more proper error page
+        if os.path.isdir(fullpath):
+            return serve_directory(path)
+        else:
+            # If a specified path exists, dreamhost seems to serve the file directly without invoking this Flask application.
+            # As nonexistent paths are taken care of above, this else-branch is not expected to ever be called. It is left in as a
+            # stub though, in case this ever changes.
+            return serve_file(path)
+
+    def serve_directory(path):
+        """
+        Serve a directory.
+        """
+        if not path.endswith('/') and len(path) > 1:
+            # Ensure paths always end with a "/"
+            return flask.redirect('/' + path + '/')
+        else:
+            return flask.render_template('directory.html', pathprefix = pathprefix, path = path, templatehelper = templatehelper)
+    
+    @app.route('/')
+    def serve_root():
+        """
+        `@app.route('/<path:path>')` doesn't match '/' and thus this convenience function is needed.
+        """
+        return serve_directory_or_file(os.path.curdir)
+
+    def serve_file(path):
+        """
+        Left as just a stub as it is unlikely to be called anytime soon.
+        """
+        return "Serving files is not implemented yet."
+
+    return app
+
+# Create an instance of the scms application.
+app = create_app()

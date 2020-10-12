@@ -1,0 +1,41 @@
+{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %} - beta.nomike.com</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://kit.fontawesome.com/3b5f69e83b.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='powerline.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}" />
+<script>
+/* Toggle between adding and removing the "responsive" class to the sidebar when the user clicks on the icon */
+function myFunction() {
+  var x = document.getElementById("sidebar");
+  if (x.className === "sidebar") {
+    x.className += " responsive";
+  } else {
+    x.className = "sidebar";
+  }
+}    
+</script>
+</head>
+<body>
+    {% block breadcrumbs %}{% endblock %}
+    {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnonavigation')): %}
+    <div class="sidebar" id="sidebar">
+        <a href="#" class="menubutton" onclick="myFunction()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </a>
+            {% block menu %}{% endblock %}
+    </div>
+    {% endif %}
+    <div class="content">{% endif %}
+        {% block content %}{% endblock %}
+{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): %}
+        </div>
+</body>
+</html>
+{% endif %}
+
