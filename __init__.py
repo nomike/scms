@@ -23,7 +23,7 @@ def create_app():
         path = urllib.parse.unquote(path)
         fullpath = os.path.join(pathprefix, path)
         if not os.path.exists(fullpath):
-            return "404"    # Todo: Write template for a more proper error page
+            return serve_error(code, "File not found...")
         if os.path.isdir(fullpath):
             return serve_directory(path)
         else:
@@ -48,6 +48,13 @@ def create_app():
         `@app.route('/<path:path>')` doesn't match '/' and thus this convenience function is needed.
         """
         return serve_directory_or_file(os.path.curdir)
+
+    def serve_error(code, message=None):
+        if os.path.exists(os.path.join(__name__, 'templates', '%d.html' % (code))):
+            template = '%d.html' % (code)
+        else:
+            template = 'error.html'
+        return flask.make_response((flask.render_template(template, code=code, message=message, templatehelper=templatehelper, pathprefix=pathprefix, path='/'), code, None))
 
     def serve_file(path):
         """

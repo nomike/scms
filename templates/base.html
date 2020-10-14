@@ -21,21 +21,12 @@ function myFunction() {
 </head>
 <body>
     {% block breadcrumbs %}{% endblock %}
-    {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnonavigation')): %}
-    <div class="sidebar" id="sidebar">
-        <a href="#" class="menubutton" onclick="myFunction()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </a>
-            {% block menu %}{% endblock %}
-    </div>
-    {% endif %}
-    <div class="content">{% endif %}
-        {% block content %}{% endblock %}
+    {% block menu %}{% endblock %}
+    <div class="content">
+{% endif %}
+{% block content %}{% endblock %}
 {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): %}
         </div>
 </body>
 </html>
 {% endif %}
-

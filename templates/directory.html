@@ -9,9 +9,18 @@
 </div>
 {% endblock %}
 {% block menu %}
+{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnonavigation')): %}
+<div class="sidebar" id="sidebar">
+    <a href="#" class="menubutton" onclick="myFunction()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </a>
+</div>
 {% for file in templatehelper.listdir(path) %}
 <a href="{{ file }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, file)) }}"></i> {{ file }}</a>
 {% endfor %}
+{% endif %}
 {% endblock %}
 
 {% block content %}
