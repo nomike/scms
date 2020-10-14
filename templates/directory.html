@@ -9,12 +9,11 @@
         <div></div>
     </a>
     {% for file in templatehelper.listdir(path) %}
-    {% if templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmstarget')): %}
-        target = templatehelper.readfile(templatehelper.os.path.join('public', path, '.scmstarget'))
+    {% if templatehelper.os.path.exists(templatehelper.os.path.join('public', path, file + '.scmstarget')): %}
+        <a href="{{ file }}" target="{{ templatehelper.readfile(templatehelper.os.path.join('public', path, file + '.scmstarget')) }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, file)) }}"></i> {{ file }}</a>
     {% else %}
-        target = '_self'
+        <a href="{{ file }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, file)) }}"></i> {{ file }}</a>
     {% endif %}
-    <a href="{{ file }}" target="{{ target }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, file)) }}"></i> {{ file }}</a>
     {% endfor %}
 </div>
 {% endif %}
