@@ -1,4 +1,4 @@
-#!/home/nomike/venv/bin/python
+#!/home/<dreamhostuser>/venv/bin/python
 import sys, os
 INTERP = os.path.join(os.environ['HOME'], 'venv', 'bin', 'python')
 if sys.executable != INTERP:
