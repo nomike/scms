@@ -16,10 +16,10 @@
         <div></div>
         <div></div>
     </a>
+    {% for file in templatehelper.listdir(path) %}
+    <a href="{{ file }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, file)) }}"></i> {{ file }}</a>
+    {% endfor %}
 </div>
-{% for file in templatehelper.listdir(path) %}
-<a href="{{ file }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, file)) }}"></i> {{ file }}</a>
-{% endfor %}
 {% endif %}
 {% endblock %}
 
