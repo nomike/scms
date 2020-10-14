@@ -1,13 +1,5 @@
 {% extends 'base.html' %}
 {% block title %}/{{ path }}{% endblock %}\
-{% block breadcrumbs %}
-<div class="powerline">
-    <a class="powerline__component" href="/"><i class="fas fa-home"></i></a>
-    {% for parentpath, parentname in templatehelper.getparents(path) %}
-    <a class="powerline__component" href="{{ parentpath }}"><i class="fas fa-folder"></i> {{ parentname }}</a>
-    {% endfor %}
-</div>
-{% endblock %}
 {% block menu %}
 {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnonavigation')): %}
 <div class="sidebar" id="sidebar">
@@ -17,7 +9,12 @@
         <div></div>
     </a>
     {% for file in templatehelper.listdir(path) %}
-    <a href="{{ file }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, file)) }}"></i> {{ file }}</a>
+    {% if templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmstarget')): %}
+        target = templatehelper.readfile(templatehelper.os.path.join('public', path, '.scmstarget'))
+    {% else %}
+        target = '_self'
+    {% endif %}
+    <a href="{{ file }}" target="{{ target }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, file)) }}"></i> {{ file }}</a>
     {% endfor %}
 </div>
 {% endif %}

@@ -20,7 +20,14 @@ function myFunction() {
 </script>
 </head>
 <body>
-    {% block breadcrumbs %}{% endblock %}
+    {% block breadcrumbs %}
+  <div class="powerline">
+    <a class="powerline__component" href="/"><i class="fas fa-home"></i></a>
+    {% for parentpath, parentname in templatehelper.getparents(path) %}
+    <a class="powerline__component" href="{{ parentpath }}"><i class="fas fa-folder"></i> {{ parentname }}</a>
+    {% endfor %}
+  </div>
+    {% endblock %}
     {% block menu %}{% endblock %}
     <div class="content">
 {% endif %}
