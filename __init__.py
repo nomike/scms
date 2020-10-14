@@ -54,7 +54,7 @@ def create_app():
             template = '%d.html' % (code)
         else:
             template = 'error.html'
-        return flask.make_response((flask.render_template(template, code=code, message=message, templatehelper=templatehelper, pathprefix=pathprefix, path='/'), code, None))
+        return flask.make_response((flask.render_template(template, code=code, message=message, templatehelper=templatehelper, pathprefix=pathprefix, path=''), code, None))
 
     def serve_file(path):
         """
