@@ -1,3 +1,12 @@
+# scms Copyright (C) 2020 - nomike <nomike@nomike.com>
+# This program comes with ABSOLUTELY NO WARRANTY; for details see LICENSE.
+# This is free software, and you are welcome to redistribute it
+# under certain conditions
+
+"""
+Creates a Flask application which serves the scms.
+"""
+
 import os
 from flask import Flask
 import flask
