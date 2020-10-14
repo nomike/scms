@@ -23,7 +23,7 @@ def create_app():
         path = urllib.parse.unquote(path)
         fullpath = os.path.join(pathprefix, path)
         if not os.path.exists(fullpath):
-            return serve_error(code, "File not found...")
+            return serve_error(404, "File not found...")
         if os.path.isdir(fullpath):
             return serve_directory(path)
         else:
