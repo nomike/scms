@@ -73,3 +73,10 @@ For example:
 ```
 
 __Note:__ Please look at `templatehelper.py` for a documentation of the available functions.
+
+# The default template
+SCMS ships with a default template (and for the moment it is not possible to have any other templates ;-)). This section describes some quirks of that template.
+
+## Image galleries
+If a folder contains a subfolder "image", an image gallery is created using all the files within that "image"-subfolder. The images are not downsized, no thumbnails are being generated.
+The images are displayed in a responsive grid and can be enlarged to a modal image brosser when being clicked.

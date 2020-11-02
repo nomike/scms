@@ -1,0 +1,20 @@
+<script src="{{ url_for('static', filename='gallery.js') }}" /></script>
+<p>Gallery:</p>
+{% for file in templatehelper.listdir(templatehelper.os.path.join(path, 'image')) %}
+<div class="galleryblock"><img src="image/{{file}}" class="thumbnail" /></div>
+{% endfor %}
+
+<!-- The Modal -->
+<div id="galleryModal" class="modal">
+  <!-- The previous Button -->
+  <span class="previous">&lt;</span>
+  <span class="next">&gt;</span>
+  <!-- The Close Button -->
+  <span class="close">&times;</span>
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="img01">
+
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption"></div>
+  <!-- The next Button -->
+</div>
