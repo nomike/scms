@@ -13,6 +13,9 @@ under certain conditions
 <script src="https://kit.fontawesome.com/3b5f69e83b.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='powerline.css') }}" />
 <link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/styles/default.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js "></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
 <script>
 /* Toggle between adding and removing the "responsive" class to the sidebar when the user clicks on the icon */
 function myFunction() {
@@ -22,7 +25,10 @@ function myFunction() {
   } else {
     x.className = "sidebar";
   }
-}    
+}
+
+/* Initialize highlight.js */
+hljs.initHighlightingOnLoad();
 </script>
 </head>
 <body>
