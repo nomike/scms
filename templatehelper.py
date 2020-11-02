@@ -14,6 +14,12 @@ import re
 import mimetypes
 import fnmatch
 from datetime import datetime, tzinfo, timezone
+import yaml
+
+config = None
+with open("config.yaml") as file:
+    config = yaml.load(file, Loader=yaml.SafeLoader)
+
 
 # paths sent by flask are relative to the "public" directory. This prefix should be added to get paths relative to the pages root directory.
 #TODO: This is a redundant specification and should be avoided.

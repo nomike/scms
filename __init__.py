@@ -14,7 +14,8 @@ from io import StringIO
 import re
 import templatehelper
 import urllib.parse
-
+import yaml
+from templatehelper import config
 
 def create_app():
     """
@@ -49,7 +50,7 @@ def create_app():
             # Ensure paths always end with a "/"
             return flask.redirect('/' + path + '/')
         else:
-            return flask.render_template('directory.html', pathprefix = pathprefix, path = path, templatehelper = templatehelper)
+            return flask.render_template(os.path.join(config['template'], 'directory.html'), pathprefix = pathprefix, path = path, templatehelper = templatehelper)
     
     @app.route('/')
     def serve_root():
@@ -59,11 +60,11 @@ def create_app():
         return serve_directory_or_file(os.path.curdir)
 
     def serve_error(code, message=None):
-        if os.path.exists(os.path.join(__name__, 'templates', '%d.html' % (code))):
+        if os.path.exists(os.path.join(__name__, 'templates', config['template'], '%d.html' % (code))):
             template = '%d.html' % (code)
         else:
             template = 'error.html'
-        return flask.make_response((flask.render_template(template, code=code, message=message, templatehelper=templatehelper, pathprefix=pathprefix, path=''), code, None))
+        return flask.make_response((flask.render_template(os.path.join(config['template'], template), code=code, message=message, templatehelper=templatehelper, pathprefix=pathprefix, path=''), code, None))
 
     def serve_file(path):
         """

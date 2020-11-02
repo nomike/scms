@@ -32,6 +32,6 @@ under certain conditions
 <h1>/{{ path }}</h1>
 {% endif %}
 {% if templatehelper.os.path.isdir(templatehelper.os.path.join(pathprefix, path, 'image')) %}
-{% include 'gallery.html' %}
+{% include templatehelper.os.path.join(templatehelper.config['template'], 'gallery.html') %}
 {% endif %}
 {% endblock %}
