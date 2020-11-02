@@ -1,8 +1,3 @@
-# scms Copyright (C) 2020 - nomike <nomike@nomike.com>
-# This program comes with ABSOLUTELY NO WARRANTY; for details see LICENSE.
-# This is free software, and you are welcome to redistribute it
-# under certain conditions
-
 """
 Contains helper functions to be used within templates.
 All functions and imports defined in here, are accessible from within Jinja2 templates.
@@ -67,10 +62,13 @@ def listdir(path):
         with open(os.path.join(pathprefix, path, '.scmsignore')) as file:
             ignorelist.extend([line.strip('\n') for line in file.readlines()])
     dirlist = [os.path.basename(f) for f in os.listdir(os.path.join(pathprefix, path)) if re.match(r'^^[^\.].*[^~]$', f) and not f in ignorelist]
+    removeitems = []
     for dir in dirlist:
         for ignore in ignorelist:
             if fnmatch.fnmatch(dir, ignore):
-                dirlist.remove(dir)
+                removeitems.append(dir)
+    for removeitem in removeitems:
+        dirlist.remove(removeitem)
     dirlist.sort()
     return dirlist
 
