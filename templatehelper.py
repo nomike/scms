@@ -13,6 +13,7 @@ import os
 import re
 import mimetypes
 import fnmatch
+from datetime import datetime, tzinfo, timezone
 
 # paths sent by flask are relative to the "public" directory. This prefix should be added to get paths relative to the pages root directory.
 #TODO: This is a redundant specification and should be avoided.
@@ -124,3 +125,19 @@ def getfastype(path):
         if mimetype.split('/')[0] in mimetype_fas_mapping:
             return mimetype_fas_mapping[mimetype.split('/')[0]]
     return 'fa-file'
+
+def getlastmodifiedfile(path):
+    assert(os.path.isdir(path))
+    newest = {"file": path, "timestamp": os.path.getmtime(path)}
+    for root, dirs, files in os.walk(path):
+        for path in dirs:
+            timestamp = os.path.getmtime(os.path.join(root, path))
+            if timestamp > newest['timestamp']:
+                newest['file'] = os.path.join(root, path)
+                newest['timestamp'] = timestamp
+        for path in files:
+            timestamp = os.path.getmtime(os.path.join(root, path))
+            if timestamp > newest['timestamp']:
+                newest['file'] = os.path.join(root, path)
+                newest['timestamp'] = timestamp
+    return newest
