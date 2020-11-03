@@ -4,7 +4,7 @@ This program comes with ABSOLUTELY NO WARRANTY; for details see LICENSE.
 This is free software, and you are welcome to redistribute it
 under certain conditions
 #}
-{% extends 'base.html' %}
+{% extends templatehelper.os.path.join(templatehelper.config['template'], 'base.html') %}
 {% block title %}/{{ path }}{% endblock %}\
 {% block menu %}
 {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnonavigation')): %}

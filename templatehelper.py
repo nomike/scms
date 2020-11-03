@@ -17,7 +17,7 @@ from datetime import datetime, tzinfo, timezone
 import yaml
 
 config = None
-with open("config.yaml") as file:
+with open(os.path.join('scms', "config.yaml")) as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
