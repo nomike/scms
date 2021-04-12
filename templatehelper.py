@@ -16,6 +16,7 @@ import fnmatch
 from datetime import datetime, tzinfo, timezone
 import yaml
 import markdown
+import urllib
 
 config = None
 with open("config.yaml") as file:
