@@ -75,8 +75,34 @@ For example:
 __Note:__ Please look at `templatehelper.py` for a documentation of the available functions.
 
 # The default template
-SCMS ships with a default template (and for the moment it is not possible to have any other templates ;-)). This section describes some quirks of that template.
+SCMS ships with a default template.
+__Note:__ It is now possible to add your own template. Just enable it in 'config.yaml'. More on template structures below,
+This section describes some quirks of that template.
 
 ## Image galleries
 If a folder contains a subfolder "image", an image gallery is created using all the files within that "image"-subfolder. The images are not downsized, no thumbnails are being generated.
 The images are displayed in a responsive grid and can be enlarged to a modal image brosser when being clicked.
+
+# Writing templates
+sscm is a flask application and thus relies on it's template engine. If you want to add your own template, just add a folder to the 'templates' folder and set it in config.yaml.
+
+The minimum content of a template is:
+static/
+directory.html
+error.html
+
+## Mandatory elements
+### static/
+A folder intended to use static files. You can put css, javscript and images files there which are supposed to be used by the template.
+
+### directory.html
+This template is called for rendering directories. It can of course include other directories. See the default template for examples.
+
+### error.html
+This template is used to render error pages (e.g. HTTP/404).
+
+## Specific error template
+Optionally you could create templates for specific erro codes. The name has
+to be <errorcode>.html (e.g. '404.html'). If no specific error template is
+found, sscm falls back to 'error.html'.
+
