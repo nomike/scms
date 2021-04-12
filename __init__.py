@@ -21,7 +21,7 @@ def create_app():
     """
     Factory for creating a Flask application.
     """
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, static_folder='templates/{}/static'.format(config['template']))
     # paths sent by flask are relative to the "public" directory. This prefix should be added to get paths relative to the pages root directory.
     pathprefix = 'public'
     
