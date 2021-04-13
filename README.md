@@ -84,7 +84,7 @@ If a folder contains a subfolder "image", an image gallery is created using all 
 The images are displayed in a responsive grid and can be enlarged to a modal image brosser when being clicked.
 
 # Writing templates
-sscm is a flask application and thus relies on it's template engine. If you want to add your own template, just add a folder to the 'templates' folder and set it in config.yaml.
+sscm is a flask application and thus relies on it's template engine. If you want to add your own template, just add a folder to the 'templates/custom/' folder and set it in config.yaml.
 
 The minimum content of a template is:
 static/
