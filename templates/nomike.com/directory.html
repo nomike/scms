@@ -28,7 +28,7 @@ under certain conditions
 {% block content %}
 {% if templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path,'index.md')) %}
 {{
-templatehelper.markdown.markdown(templatehelper.readfile(templatehelper.os.path.join(pathprefix,path,'index.md')),extensions=['fenced_code','toc']) | safe }}
+templatehelper.markdown.markdown(templatehelper.readfile(templatehelper.os.path.join(pathprefix,path,'index.md')),extensions=['fenced_code','toc','tables']) | safe }}
 {% elif templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path, 'index')) %}
 {{ templatehelper.readfile(templatehelper.os.path.join(pathprefix, path, 'index')) | safe }}
 {% else %}
