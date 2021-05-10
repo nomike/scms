@@ -39,6 +39,7 @@ hljs.initHighlightingOnLoad();
 {% endif %}
 {% block content %}{% endblock %}
 {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): %}
+<p>&nbsp;</p>
         </div>
         <div class="footer">
           {% set lastmodifiedfile = templatehelper.getlastmodifiedfile(templatehelper.os.path.join('public', path)) %}
