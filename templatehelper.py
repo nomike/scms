@@ -97,17 +97,18 @@ def listchildren(path):
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
         with open(os.path.join(pathprefix, path, '.scmsignore')) as file:
             ignorelist.extend([line.strip('\n') for line in file.readlines()])
-    dirlist = {os.path.basename(f):os.path.basename(f) for f in os.listdir(os.path.join(pathprefix, path)) if re.match(r'^^[^\.].*[^~]$', f) and not f in ignorelist]
+    dirlist = [[os.path.basename(f), os.path.basename(f)] for f in os.listdir(os.path.join(pathprefix, path)) if re.match(r'^^[^\.].*[^~]$', f) and not f in ignorelist]
     if os.path.exists(os.path.join(pathprefix, path, '.scmslinks')):
         with open(os.path.join(pathprefix, path, '.scmslinks')) as file:
             additional_links = json.load(file)
+    dirlist.extend(additional_links)
     removeitems = []
-    for dir in dirlist.keys():
+    for dir in [item[0] for item in dirlist]:
         for ignore in ignorelist:
             if fnmatch.fnmatch(dir, ignore):
                 removeitems.append(dir)
-    for removeitem in removeitems:
-        dirlist.pop(removeitem)
+    dirlist = [item for item in dirlist if item[0] not in removeitems]
+    dirlist.sort()
     return dirlist
 
 
