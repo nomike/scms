@@ -93,7 +93,7 @@ def listchildren(path):
     If a file named "index" is present, it is supposed to be rendered as the main content of the page
     and thus it will be ommited from the list as well.
     """
-    ignorelist = ['index', '*.scmsfasicon', '*.scmstarget']
+    ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
         with open(os.path.join(pathprefix, path, '.scmsignore')) as file:
             ignorelist.extend([line.strip('\n') for line in file.readlines()])
