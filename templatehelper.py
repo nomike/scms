@@ -17,6 +17,7 @@ from datetime import datetime, tzinfo, timezone
 import yaml
 import markdown
 import urllib
+import json
 
 config = None
 with open("config.yaml") as file:
@@ -80,6 +81,35 @@ def listdir(path):
         dirlist.remove(removeitem)
     dirlist.sort()
     return dirlist
+
+def listchildren(path):
+    """
+    List all child-elements of the specified path.
+    Hidden files and, files ending in ".scmsfasicon" and files ending with a "~" are ignored.
+
+    You can also ignore additional files by creating a file called ".scmsignore" in the current folder.
+    All files listed in there will not be listed.
+
+    If a file named "index" is present, it is supposed to be rendered as the main content of the page
+    and thus it will be ommited from the list as well.
+    """
+    ignorelist = ['index', '*.scmsfasicon', '*.scmstarget']
+    if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
+        with open(os.path.join(pathprefix, path, '.scmsignore')) as file:
+            ignorelist.extend([line.strip('\n') for line in file.readlines()])
+    dirlist = {os.path.basename(f):os.path.basename(f) for f in os.listdir(os.path.join(pathprefix, path)) if re.match(r'^^[^\.].*[^~]$', f) and not f in ignorelist]
+    if os.path.exists(os.path.join(pathprefix, path, '.scmslinks')):
+        with open(os.path.join(pathprefix, path, '.scmslinks')) as file:
+            additional_links = json.load(file)
+    removeitems = []
+    for dir in dirlist.keys():
+        for ignore in ignorelist:
+            if fnmatch.fnmatch(dir, ignore):
+                removeitems.append(dir)
+    for removeitem in removeitems:
+        dirlist.pop(removeitem)
+    return dirlist
+
 
 def getparents(path):
     """
