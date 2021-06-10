@@ -101,7 +101,7 @@ def listchildren(path):
     if os.path.exists(os.path.join(pathprefix, path, '.scmslinks')):
         with open(os.path.join(pathprefix, path, '.scmslinks')) as file:
             additional_links = json.load(file)
-    dirlist.extend(additional_links)
+        dirlist.extend(additional_links)
     removeitems = []
     for dir in [item[0] for item in dirlist]:
         for ignore in ignorelist:
