@@ -14,7 +14,7 @@ under certain conditions
         <div></div>
         <div></div>
     </a>
-    {% for name, link in templatehelper.listdir(path) %}
+    {% for name, link in templatehelper.listchildren(path) %}
     {% if templatehelper.os.path.exists(templatehelper.os.path.join('public', path, name + '.scmstarget')): %}
         <a href="{{ link }}" target="{{ templatehelper.readfile(templatehelper.os.path.join('public', path, name + '.scmstarget')) }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, name)) }}"></i> {{ name }}</a>
     {% else %}
