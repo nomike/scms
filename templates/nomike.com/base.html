@@ -1,4 +1,4 @@
-{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): %}
+{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): -%}
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,9 +36,9 @@ hljs.initHighlightingOnLoad();
     {% endblock %}
     {% block menu %}{% endblock %}
     <div class="content">
-{% endif %}
-{% block content %}{% endblock %}
-{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): %}
+{% endif -%}
+{% block content -%}{% endblock -%}
+{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): -%}
 <p>&nbsp;</p>
         </div>
         <div class="footer">
@@ -47,4 +47,4 @@ hljs.initHighlightingOnLoad();
         </div>
 </body>
 </html>
-{% endif %}
+{% endif -%}

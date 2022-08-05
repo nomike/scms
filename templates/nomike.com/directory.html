@@ -3,11 +3,11 @@ scms Copyright (C) 2020 - nomike <nomike@nomike.com>
 This program comes with ABSOLUTELY NO WARRANTY; for details see LICENSE.
 This is free software, and you are welcome to redistribute it
 under certain conditions
-#}
-{% extends templatehelper.os.path.join(templatehelper.config['template'], 'base.html') %}
+-#}
+{% extends templatehelper.os.path.join(templatehelper.config['template'], 'base.html') -%}
 {% block title %}/{{ path }}{% endblock %}\
 {% block menu %}
-{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnonavigation')): %}
+{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnonavigation')): -%}
 <div class="sidebar" id="sidebar">
     <a href="#" class="menubutton" onclick="myFunction()">
         <div></div>
@@ -22,18 +22,17 @@ under certain conditions
     {% endif %}
     {% endfor %}
 </div>
-{% endif %}
-{% endblock %}
-
-{% block content %}
-{% if templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path,'index.md')) %}
+{% endif -%}
+{% endblock -%}
+{% block content -%}
+{% if templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path,'index.md')) -%}
 {{
 templatehelper.markdown.markdown(templatehelper.readfile(templatehelper.os.path.join(pathprefix,path,'index.md')),extensions=['fenced_code','toc','tables']) | safe }}
-{% elif templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path, 'index')) %}
-{{ templatehelper.readfile(templatehelper.os.path.join(pathprefix, path, 'index')) | safe }}
-{% else %}
+{% elif templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path, 'index')) -%}
+{{ templatehelper.readfile(templatehelper.os.path.join(pathprefix, path, 'index')) | safe -}}
+{% else -%}
 <h1>/{{ path }}</h1>
-{% endif %}
+{% endif -%}
 {% if templatehelper.os.path.isdir(templatehelper.os.path.join(pathprefix, path, 'image')) %}
 {% include templatehelper.os.path.join(templatehelper.config['template'], 'gallery.html') %}
 {% endif %}
