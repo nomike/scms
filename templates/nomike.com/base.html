@@ -1,50 +1,48 @@
 {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): -%}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <title>{% block title %}{% endblock %} - {{ templatehelper.urllib.parse.urlparse(request.url_root).netloc }}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://kit.fontawesome.com/3b5f69e83b.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='powerline.css') }}" />
-<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}" />
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/styles/default.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js "></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
-<script>
-/* Toggle between adding and removing the "responsive" class to the sidebar when the user clicks on the icon */
-function myFunction() {
-  var x = document.getElementById("sidebar");
-  if (x.className === "sidebar") {
-    x.className += " responsive";
-  } else {
-    x.className = "sidebar";
-  }
-}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/3b5f69e83b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='powerline.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/styles/default.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js "></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+    <script>
+        /* Toggle between adding and removing the "responsive" class to the sidebar when the user clicks on the icon */
+        function myFunction() {
+            var x = document.getElementById("sidebar");
+            if (x.className === "sidebar") {
+                x.className += " responsive";
+            } else {
+                x.className = "sidebar";
+            }
+        }
 
-/* Initialize highlight.js */
-hljs.initHighlightingOnLoad();
-</script>
+        /* Initialize highlight.js */
+        hljs.initHighlightingOnLoad();
+    </script>
 </head>
+
 <body>
     {% block breadcrumbs %}
-  <div class="powerline">
-    <a class="powerline__component" href="/"><i class="fas fa-home"></i></a>
-    {% for parentpath, parentname in templatehelper.getparents(path) %}
-    <a class="powerline__component" href="{{ parentpath }}"><i class="fas fa-folder"></i> {{ parentname }}</a>
-    {% endfor %}
-  </div>
-    {% endblock %}
-    {% block menu %}{% endblock %}
+    <div class="powerline">
+        <a class="powerline__component" href="/"><i class="fas fa-home"></i></a> {% for parentpath, parentname in templatehelper.getparents(path) %}
+        <a class="powerline__component" href="{{ parentpath }}"><i class="fas fa-folder"></i> {{ parentname }}</a> {% endfor %}
+    </div>
+    {% endblock %} {% block menu %}{% endblock %}
     <div class="content">
-{% endif -%}
-{% block content -%}{% endblock -%}
-{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): -%}
-<p>&nbsp;</p>
-        </div>
-        <div class="footer">
-          {% set lastmodifiedfile = templatehelper.getlastmodifiedfile(templatehelper.os.path.join('public', path)) %}
-          Last modification in {{ lastmodifiedfile['file'] }} on {{ templatehelper.datetime.fromtimestamp(lastmodifiedfile['timestamp'], tz=templatehelper.timezone.utc).isoformat() }}
-        </div>
+        {% endif -%} {% block content -%}{% endblock -%} {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): -%}
+        <p>&nbsp;</p>
+    </div>
+    <div class="footer">
+        {% set lastmodifiedfile = templatehelper.getlastmodifiedfile(templatehelper.os.path.join('public', path)) %} Last modification in {{ lastmodifiedfile['file'] }} on {{ templatehelper.datetime.fromtimestamp(lastmodifiedfile['timestamp'], tz=templatehelper.timezone.utc).isoformat()
+        }}
+    </div>
 </body>
+
 </html>
 {% endif -%}
