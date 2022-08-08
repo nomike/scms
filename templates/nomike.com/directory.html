@@ -9,8 +9,8 @@
             <div></div>
         </a>
         {% for name, link in templatehelper.listchildren(path) %} {% if templatehelper.os.path.exists(templatehelper.os.path.join('public', path, name + '.scmstarget')): %}
-        <a href="{{ templatehelper.urllib.parse.quote_plus(link) }}" target="{{ templatehelper.readfile(templatehelper.os.path.join('public', path, name + '.scmstarget')) }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, name)) }}"></i> {{ name }}</a>        {% else %}
-        <a href="{{ templatehelper.urllib.parse.quote_plus(link) }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, name)) }}"></i> {{ name }}</a> {% endif %} {% endfor %}
+        <a href="{{ templatehelper.urllib.parse.quote(link) }}" target="{{ templatehelper.readfile(templatehelper.os.path.join('public', path, name + '.scmstarget')) }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, name)) }}"></i> {{ name }}</a>        {% else %}
+        <a href="{{ templatehelper.urllib.parse.quote(link) }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, name)) }}"></i> {{ name }}</a> {% endif %} {% endfor %}
     </div>
     {% endif -%} {% endblock -%} {% block content -%} {% if templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path,'index.md')) -%} {{ templatehelper.markdown.markdown(templatehelper.readfile(templatehelper.os.path.join(pathprefix,path,'index.md')),extensions=['fenced_code','toc','tables'])
     | safe }} {% elif templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path, 'index')) -%} {{ templatehelper.readfile(templatehelper.os.path.join(pathprefix, path, 'index')) | safe -}} {% else -%}
