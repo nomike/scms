@@ -56,7 +56,7 @@ div.content {
     margin-top: 26px;
     margin-left: 200px;
     padding: 1px 16px;
-    height: 1000px;
+    padding-bottom: 25px;
 }
 
 
@@ -294,4 +294,5 @@ div.galleryblock img:hover {
     position: fixed;
     bottom: 0px;
     width: 100%;
+    height: 20px;
 }
