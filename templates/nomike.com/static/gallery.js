@@ -7,17 +7,17 @@ function setModal(index) {
     } else {
         $(".previous").css("display", "inline-flex");
         $(".previous").off("click");
-        $(".previous").click(function (){
+        $(".previous").click(function() {
             setModal(index - 1);
         });
     }
 
-    if (index == count -1) {
+    if (index == count - 1) {
         $(".next").css("display", "none");
     } else {
         $(".next").css("display", "inline-flex");
         $(".next").off("click");
-        $(".next").click(function (){
+        $(".next").click(function() {
             setModal(index + 1);
         });
     }
@@ -26,16 +26,17 @@ function setModal(index) {
     $(".modal").css("display", "block");
 }
 
-$(document).ready(function () {
-    $("img.thumbnail").each(function( index ){
+$(document).ready(function() {
+    $("img.thumbnail").each(function(index) {
         $(this).click(function() {
-            setModal(index)});
+            setModal(index)
+        });
     });
 
 
-    $("span.close").click(function () {
+    $("span.close").click(function() {
         $(".modal").css("display", "none");
-    });    
+    });
 });
 
 // // Get the modal
@@ -57,4 +58,4 @@ $(document).ready(function () {
 // // When the user clicks on <span> (x), close the modal
 // span.onclick = function() {
 //   modal.style.display = "none";
-// } 
+// }
