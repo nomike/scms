@@ -296,3 +296,8 @@ div.galleryblock img:hover {
     width: 100%;
     height: 20px;
 }
+
+:not(pre)>code {
+    background: lightgray;
+    border: 1px solid gray;
+}
