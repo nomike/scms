@@ -21,13 +21,13 @@ import urllib
 import json
 
 config = None
-with open("config.yaml") as file:
+with open("../config.yaml") as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
 # paths sent by flask are relative to the "public" directory. This prefix should be added to get paths relative to the pages root directory.
 #TODO: This is a redundant specification and should be avoided.
-pathprefix = 'public'
+pathprefix = ''
 
 # List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml
 # If you want additional mimetypes to be covered, add them to this list.
@@ -72,7 +72,7 @@ def listdir(path):
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
         with open(os.path.join(pathprefix, path, '.scmsignore')) as file:
             ignorelist.extend([line.strip('\n') for line in file.readlines()])
-    dirlist = [os.path.basename(f) for f in os.listdir(os.path.join(pathprefix, path)) if regex.match('^(?!\.).*(?<!~)$', f) and not f in ignorelist]
+    dirlist = [os.path.basename(f) for f in os.listdir(os.path.join(pathprefix, path)) if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist]
     removeitems = []
     for dir in dirlist:
         for ignore in ignorelist:
@@ -98,7 +98,7 @@ def listchildren(path):
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
         with open(os.path.join(pathprefix, path, '.scmsignore')) as file:
             ignorelist.extend([line.strip('\n') for line in file.readlines()])
-    dirlist = [[os.path.basename(f), os.path.basename(f)] for f in os.listdir(os.path.join(pathprefix, path)) if regex.match('^(?!\.).*(?<!~)$', f) and not f in ignorelist]
+    dirlist = [[os.path.basename(f), os.path.basename(f)] for f in os.listdir(os.path.join(pathprefix, path)) if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist]
     if os.path.exists(os.path.join(pathprefix, path, '.scmslinks')):
         with open(os.path.join(pathprefix, path, '.scmslinks')) as file:
             additional_links = json.load(file)
@@ -167,6 +167,7 @@ def getfastype(path):
     return 'fa-file'
 
 def getlastmodifiedfile(path):
+    path = os.path.join('..', path)
     assert(os.path.isdir(path))
     newest = {"file": path, "timestamp": os.path.getmtime(path)}
     for root, dirs, files in os.walk(path):
