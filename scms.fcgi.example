@@ -1,0 +1,11 @@
+#!/home/user/venv/bin/python
+import sys
+
+sys.path.append('..')
+sys.path.append('../scms')
+
+from flup.server.fcgi import WSGIServer
+from scms import app
+
+if __name__ == '__main__':
+    WSGIServer(app).run()
