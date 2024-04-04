@@ -23,10 +23,6 @@ Install a custom python3 version (scms was tested on v. 3.9 but should be runnin
 Install a python3 venv as per these instructions:
 <https://help.dreamhost.com/hc/en-us/articles/115000695551-Installing-and-using-virtualenv-with-Python-3>
 
-#### Activate Passenger
-
-Activate Passenger for your domain as per these instructions: <https://help.dreamhost.com/hc/en-us/articles/216385637-How-do-I-enable-Passenger-on-my-domain->
-
 ### Install scms
 
 1. Clone this git repository to your websites directory (e.g. `/home/<dreamhostuser>/<domainname>/scms/`).
@@ -37,6 +33,25 @@ __Note:__ You have to put in your dreamhost username at the shebang of this scri
 ### Add content
 
 Create the `public` folder (`/home/<dreamhostuser>/<domainname>/public`) and fill it with files, subfolders or whatever content you desire. You can find more information on that below.
+
+### Setup fast-cgi
+
+Copy scms.fcgi.example to your website's 'public' folder and rename it to 'scms.fcgi'. Make sure the shebang points to your custom python3 venv.
+
+### Setup .htaccess
+
+Add the following lines to your .htaccess file in your website's 'public' folder:
+
+```apache
+RewriteEngine On
+AddHandler fcgid-script .fcgi
+RewriteRule ^(scms\.fcgi/.*)$ - [L]
+RewriteRule ^(.*)$ scms.fcgi/$1 [L]
+```
+
+### Troubleshooting
+
+If you're getting HTTP/500 errors when trying to open your website, check the error logs. They can be found in `~/logs/<domainname>/https/error.log`.
 
 ## The public directory
 
@@ -127,5 +142,5 @@ This template is used to render error pages (e.g. HTTP/404).
 ### Specific error template
 
 Optionally you could create templates for specific erro codes. The name has
-to be <errorcode>.html (e.g. '404.html'). If no specific error template is
+to be [errorcode].html (e.g. '404.html'). If no specific error template is
 found, sscm falls back to 'error.html'.
