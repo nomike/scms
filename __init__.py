@@ -12,18 +12,17 @@ from flask import Flask
 import flask
 from io import StringIO
 import re
-import templatehelper
+from . import templatehelper
 import urllib.parse
 import yaml
-from templatehelper import config
 
 def create_app():
     """
     Factory for creating a Flask application.
     """
-    app = Flask(__name__, instance_relative_config=True, static_folder='templates/{}/static'.format(config['template']))
+    app = Flask(__name__, instance_relative_config=True, static_folder='templates/{}/static'.format(templatehelper.config['template']))
     # paths sent by flask are relative to the "public" directory. This prefix should be added to get paths relative to the pages root directory.
-    pathprefix = 'public'
+    pathprefix = ''
     
     @app.route('/<path:path>')
     def serve_directory_or_file(path):
@@ -50,7 +49,7 @@ def create_app():
             # Ensure paths always end with a "/"
             return flask.redirect('/' + path + '/')
         else:
-            return flask.render_template(os.path.join(config['template'], 'directory.html'), pathprefix = pathprefix, path = path, templatehelper = templatehelper)
+            return flask.render_template(os.path.join(templatehelper.config['template'], 'directory.html'), pathprefix = pathprefix, path = path, templatehelper = templatehelper)
     
     @app.route('/')
     def serve_root():
@@ -60,17 +59,14 @@ def create_app():
         return serve_directory_or_file(os.path.curdir)
 
     def serve_error(code, message=None):
-        if os.path.exists(os.path.join(__name__, 'templates', config['template'], '%d.html' % (code))):
+        if os.path.exists(os.path.join(__name__, 'templates', templatehelper.config['template'], '%d.html' % (code))):
             template = '%d.html' % (code)
         else:
             template = 'error.html'
-        return flask.make_response((flask.render_template(os.path.join(config['template'], template), code=code, message=message, templatehelper=templatehelper, pathprefix=pathprefix, path=''), code, None))
+        return flask.make_response((flask.render_template(os.path.join(templatehelper.config['template'], template), code=code, message=message, templatehelper=templatehelper, pathprefix=pathprefix, path=''), code, None))
 
     def serve_file(path):
-        """
-        Left as just a stub as it is unlikely to be called anytime soon.
-        """
-        return "Serving files is not implemented yet."
+        return flask.send_file(os.path.join('..', 'public', path))
 
     return app
 
