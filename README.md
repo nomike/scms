@@ -45,6 +45,7 @@ Add the following lines to your .htaccess file in your website's 'public' folder
 ```apache
 RewriteEngine On
 AddHandler fcgid-script .fcgi
+RewriteRule ^(scms\.fcgi)$ 404.h4ml [L]
 RewriteRule ^(scms\.fcgi/.*)$ - [L]
 RewriteRule ^(.*)$ scms.fcgi/$1 [L]
 ```
