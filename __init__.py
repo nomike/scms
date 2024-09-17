@@ -66,6 +66,9 @@ def create_app():
         return flask.make_response((flask.render_template(os.path.join(templatehelper.config['template'], template), code=code, message=message, templatehelper=templatehelper, pathprefix=pathprefix, path=''), code, None))
 
     def serve_file(path):
+        """
+        Left as just a stub as it is unlikely to be called anytime soon.
+        """
         return flask.send_file(os.path.join('..', 'public', path))
 
     return app
