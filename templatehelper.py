@@ -5,33 +5,34 @@ All functions and imports defined in here, are accessible from within Jinja2 tem
 Example:
 
     {% for parentpath, parentname in templatehelper.getparents(path) %}
-    <a class="powerline__component" href="{{ parentpath }}"><i class="fas fa-folder"></i> {{ parentname }}</a>
+    <a class="powerline__component" href="{{ parentpath }}">
+        <i class="fas fa-folder"></i> {{ parentname }}
+    </a>
     {% endfor %}
 """
 
-import os
-import re
-import regex
-import mimetypes
 import fnmatch
-from datetime import datetime, tzinfo, timezone
-import yaml
-import markdown
-import urllib
 import json
+import mimetypes
+import os
+
+import regex
+import yaml
 
 config = None
 with open("../config.yaml") as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
-# paths sent by flask are relative to the "public" directory. This prefix should be added to get paths relative to the pages root directory.
+# paths sent by flask are relative to the "public" directory. This prefix should be added to get
+# paths relative to the pages root directory.
 #TODO: This is a redundant specification and should be avoided.
 pathprefix = ''
 
 # List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml
 # If you want additional mimetypes to be covered, add them to this list.
-# The types map to FontAwesome identifiers. Check out https://fontawesome.com/icons?d=gallery for a list of available images.
+# The types map to FontAwesome identifiers. Check out https://fontawesome.com/icons?d=gallery
+# for a list of available images.
 mimetype_fas_mapping = {
 # Media
 'image': 'fa-file-image',
@@ -62,11 +63,12 @@ def listdir(path):
     List all child-elements of the specified path.
     Hidden files and, files ending in ".scmsfasicon" and files ending with a "~" are ignored.
 
-    You can also ignore additional files by creating a file called ".scmsignore" in the current folder.
+    You can also ignore additional files by creating a file called ".scmsignore" in the current
+    folder.
     All files listed in there will not be listed.
 
-    If a file named "index" is present, it is supposed to be rendered as the main content of the page
-    and thus it will be ommited from the list as well.
+    If a file named "index" is present, it is supposed to be rendered as the main content of the
+    page and thus it will be ommited from the list as well.
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
@@ -88,11 +90,12 @@ def listchildren(path):
     List all child-elements of the specified path.
     Hidden files and, files ending in ".scmsfasicon" and files ending with a "~" are ignored.
 
-    You can also ignore additional files by creating a file called ".scmsignore" in the current folder.
+    You can also ignore additional files by creating a file called ".scmsignore" in the current
+    folder.
     All files listed in there will not be listed.
 
-    If a file named "index" is present, it is supposed to be rendered as the main content of the page
-    and thus it will be ommited from the list as well.
+    If a file named "index" is present, it is supposed to be rendered as the main content of the
+    page and thus it will be ommited from the list as well.
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
@@ -118,7 +121,8 @@ def getparents(path):
     Return a list of tupels with all parent elements.
     Tupels have the format
     (path, basename)
-        path: the full path relative to the "public" folder, leading to the parent, including the basename
+        path: the full path relative to the "public" folder, leading to the parent, including the
+            basename
         basename: only the basename of the parent
     """
     pathelements = path.split(os.path.sep)[:-1]
