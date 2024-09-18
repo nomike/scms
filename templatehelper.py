@@ -26,7 +26,6 @@ with open("../config.yaml", encoding='utf-8') as file:
 
 # paths sent by flask are relative to the "public" directory. This prefix should be added to get
 # paths relative to the pages root directory.
-#TODO: This is a redundant specification and should be avoided.
 PATHPREFIX = ''
 
 # List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml
@@ -136,6 +135,7 @@ def getparents(path):
     pathelements = path.split(os.path.sep)[:-1]
     parents = []
     i = 0
+    # pylint: disable=consider-using-enumerate
     for i in range(0, len(pathelements)):
         parents.append(('/' + '/'.join(pathelements[:i+1]), pathelements[i]))
     return parents
@@ -178,18 +178,22 @@ def getfastype(path):
     return 'fa-file'
 
 def getlastmodifiedfile(path):
+    """
+    Recursively search for the newest file in the specified directory.
+    """
+
     path = os.path.join('..', path)
     assert os.path.isdir(path)
     newest = {"file": path, "timestamp": os.path.getmtime(path)}
     for root, dirs, files in os.walk(path):
-        for path in dirs:
-            timestamp = os.path.getmtime(os.path.join(root, path))
+        for directory in dirs:
+            timestamp = os.path.getmtime(os.path.join(root, directory))
             if timestamp > newest['timestamp']:
-                newest['file'] = os.path.join(root, path)
+                newest['file'] = os.path.join(root, directory)
                 newest['timestamp'] = timestamp
-        for path in files:
-            timestamp = os.path.getmtime(os.path.join(root, path))
+        for directory in files:
+            timestamp = os.path.getmtime(os.path.join(root, directory))
             if timestamp > newest['timestamp']:
-                newest['file'] = os.path.join(root, path)
+                newest['file'] = os.path.join(root, directory)
                 newest['timestamp'] = timestamp
     return newest

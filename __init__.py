@@ -17,11 +17,11 @@ from flask import Flask
 from . import templatehelper
 
 
-def create_app():
+def create_application():
     """
     Factory for creating a Flask application.
     """
-    app = Flask(
+    application = Flask(
             __name__,
             instance_relative_config=True,
             static_folder=f"templates/{templatehelper.CONFIG['template']}/static")
@@ -29,7 +29,7 @@ def create_app():
     # get paths relative to the pages root directory.
     pathprefix = ''
 
-    @app.route('/<path:path>')
+    @application.route('/<path:path>')
     def serve_directory_or_file(path):
         """
         Main handler for all paths
@@ -61,10 +61,11 @@ def create_app():
                 path = path,
                 templatehelper = templatehelper)
 
-    @app.route('/')
+    @application.route('/')
     def serve_root():
         """
-        `@app.route('/<path:path>')` doesn't match '/' and thus this convenience function is needed.
+        `@application.route('/<path:path>')` doesn't match '/' and thus this convenience function
+            is needed.
         """
         return serve_directory_or_file(os.path.curdir)
 
@@ -95,7 +96,7 @@ def create_app():
         """
         return flask.send_file(os.path.join('..', 'public', path))
 
-    return app
+    return application
 
 # Create an instance of the scms application.
-app = create_app()
+app = create_application()
