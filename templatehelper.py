@@ -30,7 +30,7 @@ import yaml
 # pylint: disable=invalid-name
 config = None
 
-with open("../config.yaml", encoding=locale.getencoding()) as file:
+with open("../config.yaml", encoding=locale.getpreferredencoding()) as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
@@ -84,7 +84,7 @@ def listdir(path):
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
         with open(
                 os.path.join(pathprefix, path, '.scmsignore'),
-                encoding=locale.getencoding()) as scsmignore:
+                encoding=locale.getpreferredencoding()) as scsmignore:
             ignorelist.extend([line.strip('\n') for line in scsmignore.readlines()])
     dirlist = [
             os.path.basename(f)
@@ -117,7 +117,7 @@ def listchildren(path):
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
         with open(
                 os.path.join(pathprefix, path, '.scmsignore'),
-                encoding=locale.getencoding()) as scmsignore:
+                encoding=locale.getpreferredencoding()) as scmsignore:
             ignorelist.extend([line.strip('\n') for line in scmsignore.readlines()])
     dirlist = [
             [os.path.basename(f), os.path.basename(f)]
@@ -127,7 +127,7 @@ def listchildren(path):
     if os.path.exists(os.path.join(pathprefix, path, '.scmslinks')):
         with open(
                 os.path.join(pathprefix, path, '.scmslinks'),
-                encoding=locale.getencoding()) as scmslinks:
+                encoding=locale.getpreferredencoding()) as scmslinks:
             additional_links = json.load(scmslinks)
         dirlist.extend(additional_links)
     removeitems = []
