@@ -19,15 +19,15 @@ import os
 import regex
 import yaml
 
-config = None
-with open("../config.yaml") as file:
-    config = yaml.load(file, Loader=yaml.SafeLoader)
+CONFIG = None
+with open("../config.yaml", encoding='utf-8') as file:
+    CONFIG = yaml.load(file, Loader=yaml.SafeLoader)
 
 
 # paths sent by flask are relative to the "public" directory. This prefix should be added to get
 # paths relative to the pages root directory.
 #TODO: This is a redundant specification and should be avoided.
-pathprefix = ''
+PATHPREFIX = ''
 
 # List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml
 # If you want additional mimetypes to be covered, add them to this list.
@@ -71,12 +71,12 @@ def listdir(path):
     page and thus it will be ommited from the list as well.
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
-    if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
-        with open(os.path.join(pathprefix, path, '.scmsignore')) as file:
+    if os.path.exists(os.path.join(PATHPREFIX, path, '.scmsignore')):
+        with open(os.path.join(PATHPREFIX, path, '.scmsignore'), encoding='utf-8') as file:
             ignorelist.extend([line.strip('\n') for line in file.readlines()])
     dirlist = [
             os.path.basename(f)
-            for f in os.listdir(os.path.join(pathprefix, path))
+            for f in os.listdir(os.path.join(PATHPREFIX, path))
             if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist
         ]
     removeitems = []
@@ -102,16 +102,16 @@ def listchildren(path):
     page and thus it will be ommited from the list as well.
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
-    if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
-        with open(os.path.join(pathprefix, path, '.scmsignore')) as file:
+    if os.path.exists(os.path.join(PATHPREFIX, path, '.scmsignore')):
+        with open(os.path.join(PATHPREFIX, path, '.scmsignore'), encoding='utf-8') as file:
             ignorelist.extend([line.strip('\n') for line in file.readlines()])
     dirlist = [
             [os.path.basename(f), os.path.basename(f)]
-            for f in os.listdir(os.path.join(pathprefix, path))
+            for f in os.listdir(os.path.join(PATHPREFIX, path))
             if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist
         ]
-    if os.path.exists(os.path.join(pathprefix, path, '.scmslinks')):
-        with open(os.path.join(pathprefix, path, '.scmslinks')) as file:
+    if os.path.exists(os.path.join(PATHPREFIX, path, '.scmslinks')):
+        with open(os.path.join(PATHPREFIX, path, '.scmslinks'), 'utf-8') as file:
             additional_links = json.load(file)
         dirlist.extend(additional_links)
     removeitems = []
@@ -154,8 +154,8 @@ def getfasicon(path):
     Check if a file named basename(path) + '.scmfasicon' exists, and return it's content.
     If not, handover to getfastype(path)
     """
-    if os.path.isfile(os.path.join(pathprefix, path) + '.scmsfasicon'):
-        return readfile(os.path.join(pathprefix, path) + '.scmsfasicon')
+    if os.path.isfile(os.path.join(PATHPREFIX, path) + '.scmsfasicon'):
+        return readfile(os.path.join(PATHPREFIX, path) + '.scmsfasicon')
     else:
         return getfastype(path)
 
@@ -167,11 +167,11 @@ def getfastype(path):
     (the part of the mime-type before the slash).
     If this fails as well, fallback to a default.
     """
-    if os.path.isdir(os.path.join(pathprefix, path)):
+    if os.path.isdir(os.path.join(PATHPREFIX, path)):
         return "fa-folder"
 
     mimetype = mimetypes.guess_type(path)[0]
-    if not mimetype == None:
+    if not mimetype is None:
         if mimetype in mimetype_fas_mapping:
             return mimetype_fas_mapping[mimetype]
         if mimetype.split('/')[0] in mimetype_fas_mapping:
@@ -180,7 +180,7 @@ def getfastype(path):
 
 def getlastmodifiedfile(path):
     path = os.path.join('..', path)
-    assert(os.path.isdir(path))
+    assert os.path.isdir(path)
     newest = {"file": path, "timestamp": os.path.getmtime(path)}
     for root, dirs, files in os.walk(path):
         for path in dirs:
