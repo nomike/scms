@@ -24,7 +24,7 @@ def create_application():
     application = Flask(
             __name__,
             instance_relative_config=True,
-            static_folder=f"templates/{templatehelper.CONFIG['template']}/static")
+            static_folder=f"templates/{templatehelper.config['template']}/static")
     # paths sent by flask are relative to the "public" directory. This prefix should be added to
     # get paths relative to the pages root directory.
     pathprefix = ''
@@ -56,7 +56,7 @@ def create_application():
             # Ensure paths always end with a "/"
             return flask.redirect('/' + path + '/')
         return flask.render_template(
-                os.path.join(templatehelper.CONFIG['template'], 'directory.html'),
+                os.path.join(templatehelper.config['template'], 'directory.html'),
                 pathprefix = pathprefix,
                 path = path,
                 templatehelper = templatehelper)
@@ -74,14 +74,14 @@ def create_application():
                 os.path.join(
                         __name__,
                         'templates',
-                        templatehelper.CONFIG['template'],
+                        templatehelper.config['template'],
                         f'{code}.html')):
             template = f'{code}.html'
         else:
             template = 'error.html'
         return flask.make_response((
                 flask.render_template(
-                        os.path.join(templatehelper.CONFIG['template'], template),
+                        os.path.join(templatehelper.config['template'], template),
                         code=code,
                         message=message,
                         templatehelper=templatehelper,
