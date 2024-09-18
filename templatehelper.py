@@ -199,8 +199,8 @@ def getlastmodifiedfile(path):
     Recursively search for the newest file in the specified directory.
     """
 
-    path = os.path.join('..', path)
-    assert os.path.isdir(path)
+    path = os.path.join('.', path)
+    assert os.path.isdir(path), f'{path} is not a directory!'
     newest = {"file": path, "timestamp": os.path.getmtime(path)}
     for root, dirs, files in os.walk(path):
         for directory in dirs:
