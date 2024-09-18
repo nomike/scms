@@ -82,7 +82,9 @@ def listdir(path):
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
-        with open(os.path.join(pathprefix, path, '.scmsignore'), encoding=locale.getencoding()) as scsmignore:
+        with open(
+                os.path.join(pathprefix, path, '.scmsignore'),
+                encoding=locale.getencoding()) as scsmignore:
             ignorelist.extend([line.strip('\n') for line in scsmignore.readlines()])
     dirlist = [
             os.path.basename(f)
@@ -113,7 +115,9 @@ def listchildren(path):
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
-        with open(os.path.join(pathprefix, path, '.scmsignore'), encoding=locale.getencoding()) as scmsignore:
+        with open(
+                os.path.join(pathprefix, path, '.scmsignore'),
+                encoding=locale.getencoding()) as scmsignore:
             ignorelist.extend([line.strip('\n') for line in scmsignore.readlines()])
     dirlist = [
             [os.path.basename(f), os.path.basename(f)]
@@ -121,7 +125,9 @@ def listchildren(path):
             if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist
         ]
     if os.path.exists(os.path.join(pathprefix, path, '.scmslinks')):
-        with open(os.path.join(pathprefix, path, '.scmslinks'), encoding=locale.getencoding()) as scmslinks:
+        with open(
+                os.path.join(pathprefix, path, '.scmslinks'),
+                encoding=locale.getencoding()) as scmslinks:
             additional_links = json.load(scmslinks)
         dirlist.extend(additional_links)
     removeitems = []
