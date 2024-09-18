@@ -111,7 +111,7 @@ def listchildren(path):
             if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist
         ]
     if os.path.exists(os.path.join(PATHPREFIX, path, '.scmslinks')):
-        with open(os.path.join(PATHPREFIX, path, '.scmslinks'), 'utf-8') as file:
+        with open(os.path.join(PATHPREFIX, path, '.scmslinks'), encoding='utf-8') as file:
             additional_links = json.load(file)
         dirlist.extend(additional_links)
     removeitems = []
@@ -146,7 +146,7 @@ def readfile(path, default=None):
     """
     if not os.path.exists(path) and default:
         return default
-    with open(path, 'r') as file:
+    with open(path, 'rb') as file:
         return file.read()
 
 def getfasicon(path):
@@ -156,8 +156,7 @@ def getfasicon(path):
     """
     if os.path.isfile(os.path.join(PATHPREFIX, path) + '.scmsfasicon'):
         return readfile(os.path.join(PATHPREFIX, path) + '.scmsfasicon')
-    else:
-        return getfastype(path)
+    return getfastype(path)
 
 def getfastype(path):
     """
