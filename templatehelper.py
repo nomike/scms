@@ -19,14 +19,17 @@ import os
 import regex
 import yaml
 
-CONFIG = None
+# pylint: disable=invalid-name
+config = None
+
 with open("../config.yaml", encoding='utf-8') as file:
-    CONFIG = yaml.load(file, Loader=yaml.SafeLoader)
+    config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
 # paths sent by flask are relative to the "public" directory. This prefix should be added to get
 # paths relative to the pages root directory.
-PATHPREFIX = ''
+# pylint: disable=invalid-name
+pathprefix = ''
 
 # List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml
 # If you want additional mimetypes to be covered, add them to this list.
@@ -70,12 +73,12 @@ def listdir(path):
     page and thus it will be ommited from the list as well.
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
-    if os.path.exists(os.path.join(PATHPREFIX, path, '.scmsignore')):
-        with open(os.path.join(PATHPREFIX, path, '.scmsignore'), encoding='utf-8') as scsmignore:
+    if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
+        with open(os.path.join(pathprefix, path, '.scmsignore'), encoding='utf-8') as scsmignore:
             ignorelist.extend([line.strip('\n') for line in scsmignore.readlines()])
     dirlist = [
             os.path.basename(f)
-            for f in os.listdir(os.path.join(PATHPREFIX, path))
+            for f in os.listdir(os.path.join(pathprefix, path))
             if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist
         ]
     removeitems = []
@@ -101,16 +104,16 @@ def listchildren(path):
     page and thus it will be ommited from the list as well.
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
-    if os.path.exists(os.path.join(PATHPREFIX, path, '.scmsignore')):
-        with open(os.path.join(PATHPREFIX, path, '.scmsignore'), encoding='utf-8') as scmsignore:
+    if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
+        with open(os.path.join(pathprefix, path, '.scmsignore'), encoding='utf-8') as scmsignore:
             ignorelist.extend([line.strip('\n') for line in scmsignore.readlines()])
     dirlist = [
             [os.path.basename(f), os.path.basename(f)]
-            for f in os.listdir(os.path.join(PATHPREFIX, path))
+            for f in os.listdir(os.path.join(pathprefix, path))
             if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist
         ]
-    if os.path.exists(os.path.join(PATHPREFIX, path, '.scmslinks')):
-        with open(os.path.join(PATHPREFIX, path, '.scmslinks'), encoding='utf-8') as scmslinks:
+    if os.path.exists(os.path.join(pathprefix, path, '.scmslinks')):
+        with open(os.path.join(pathprefix, path, '.scmslinks'), encoding='utf-8') as scmslinks:
             additional_links = json.load(scmslinks)
         dirlist.extend(additional_links)
     removeitems = []
@@ -154,8 +157,8 @@ def getfasicon(path):
     Check if a file named basename(path) + '.scmfasicon' exists, and return it's content.
     If not, handover to getfastype(path)
     """
-    if os.path.isfile(os.path.join(PATHPREFIX, path) + '.scmsfasicon'):
-        return readfile(os.path.join(PATHPREFIX, path) + '.scmsfasicon')
+    if os.path.isfile(os.path.join(pathprefix, path) + '.scmsfasicon'):
+        return readfile(os.path.join(pathprefix, path) + '.scmsfasicon')
     return getfastype(path)
 
 def getfastype(path):
@@ -166,7 +169,7 @@ def getfastype(path):
     (the part of the mime-type before the slash).
     If this fails as well, fallback to a default.
     """
-    if os.path.isdir(os.path.join(PATHPREFIX, path)):
+    if os.path.isdir(os.path.join(pathprefix, path)):
         return "fa-folder"
 
     mimetype = mimetypes.guess_type(path)[0]
