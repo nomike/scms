@@ -72,18 +72,18 @@ def listdir(path):
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(PATHPREFIX, path, '.scmsignore')):
-        with open(os.path.join(PATHPREFIX, path, '.scmsignore'), encoding='utf-8') as file:
-            ignorelist.extend([line.strip('\n') for line in file.readlines()])
+        with open(os.path.join(PATHPREFIX, path, '.scmsignore'), encoding='utf-8') as scsmignore:
+            ignorelist.extend([line.strip('\n') for line in scsmignore.readlines()])
     dirlist = [
             os.path.basename(f)
             for f in os.listdir(os.path.join(PATHPREFIX, path))
             if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist
         ]
     removeitems = []
-    for dir in dirlist:
+    for directory in dirlist:
         for ignore in ignorelist:
-            if fnmatch.fnmatch(dir, ignore):
-                removeitems.append(dir)
+            if fnmatch.fnmatch(directory, ignore):
+                removeitems.append(directory)
     for removeitem in removeitems:
         dirlist.remove(removeitem)
     dirlist.sort()
@@ -103,22 +103,22 @@ def listchildren(path):
     """
     ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(PATHPREFIX, path, '.scmsignore')):
-        with open(os.path.join(PATHPREFIX, path, '.scmsignore'), encoding='utf-8') as file:
-            ignorelist.extend([line.strip('\n') for line in file.readlines()])
+        with open(os.path.join(PATHPREFIX, path, '.scmsignore'), encoding='utf-8') as scmsignore:
+            ignorelist.extend([line.strip('\n') for line in scmsignore.readlines()])
     dirlist = [
             [os.path.basename(f), os.path.basename(f)]
             for f in os.listdir(os.path.join(PATHPREFIX, path))
             if regex.match('^(?!\\.).*(?<!~)$', f) and not f in ignorelist
         ]
     if os.path.exists(os.path.join(PATHPREFIX, path, '.scmslinks')):
-        with open(os.path.join(PATHPREFIX, path, '.scmslinks'), encoding='utf-8') as file:
-            additional_links = json.load(file)
+        with open(os.path.join(PATHPREFIX, path, '.scmslinks'), encoding='utf-8') as scmslinks:
+            additional_links = json.load(scmslinks)
         dirlist.extend(additional_links)
     removeitems = []
-    for dir in [item[0] for item in dirlist]:
+    for directory in [item[0] for item in dirlist]:
         for ignore in ignorelist:
-            if fnmatch.fnmatch(dir, ignore):
-                removeitems.append(dir)
+            if fnmatch.fnmatch(directory, ignore):
+                removeitems.append(directory)
     dirlist = [item for item in dirlist if item[0] not in removeitems]
     dirlist.sort()
     return dirlist
@@ -146,8 +146,8 @@ def readfile(path, default=None):
     """
     if not os.path.exists(path) and default:
         return default
-    with open(path, 'rb') as file:
-        return file.read()
+    with open(path, 'rb') as requested_file:
+        return requested_file.read()
 
 def getfasicon(path):
     """
