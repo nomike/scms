@@ -1,4 +1,4 @@
-{% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): -%}
+{% if not templatehelper.os.path.exists(templatehelper.os.path.join(path, '.scmsnotemplate')): -%}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,11 +35,11 @@
     </div>
     {% endblock %} {% block menu %}{% endblock %}
     <div class="content">
-        {% endif -%} {% block content -%}{% endblock -%} {% if not templatehelper.os.path.exists(templatehelper.os.path.join('public', path, '.scmsnotemplate')): -%}
+        {% endif -%} {% block content -%}{% endblock -%} {% if not templatehelper.os.path.exists(templatehelper.os.path.join(path, '.scmsnotemplate')): -%}
         <p>&nbsp;</p>
     </div>
     <div class="footer">
-        {% set lastmodifiedfile = templatehelper.getlastmodifiedfile(templatehelper.os.path.join('public', path)) %} Last modification in {{ lastmodifiedfile['file'] }} on {{ templatehelper.datetime.fromtimestamp(lastmodifiedfile['timestamp'], tz=templatehelper.timezone.utc).isoformat()
+        {% set lastmodifiedfile = templatehelper.getlastmodifiedfile(templatehelper.os.path.join(path)) %} Last modification in {{ lastmodifiedfile['file'] }} on {{ templatehelper.datetime.fromtimestamp(lastmodifiedfile['timestamp'], tz=templatehelper.timezone.utc).isoformat()
         }}
     </div>
 </body>

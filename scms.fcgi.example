@@ -1,11 +1,14 @@
-#!/home/user/venv/bin/python
+#!/home/<dreamhostuser>/venv/bin/python
+
+# scms Copyright (C) 2020 - nomike <nomike@nomike.com>
+# This program comes with ABSOLUTELY NO WARRANTY; for details see LICENSE.
+# This is free software, and you are welcome to redistribute it
+# under certain conditions; type `show c' for details.
+
 import sys
 
-sys.path.append('..')
+sys.path.append('.')
 sys.path.append('../scms')
 
 from flup.server.fcgi import WSGIServer
-from scms import app
-
-if __name__ == '__main__':
-    WSGIServer(app).run()
+from scms import app as application
