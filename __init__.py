@@ -8,13 +8,14 @@ Creates a Flask application which serves the scms.
 """
 
 import os
-from flask import Flask
-import flask
-from io import StringIO
-import re
-from . import templatehelper
 import urllib.parse
-import yaml
+from io import StringIO
+
+import flask
+from flask import Flask
+
+from . import templatehelper
+
 
 def create_app():
     """
@@ -23,11 +24,11 @@ def create_app():
     app = Flask(
             __name__,
             instance_relative_config=True,
-            static_folder='templates/{}/static'.format(templatehelper.config['template']))
+            static_folder=f"templates/{templatehelper.config['template']}/static")
     # paths sent by flask are relative to the "public" directory. This prefix should be added to
     # get paths relative to the pages root directory.
     pathprefix = ''
-    
+
     @app.route('/<path:path>')
     def serve_directory_or_file(path):
         """
@@ -39,13 +40,13 @@ def create_app():
             return serve_error(404, "File not found...")
         if os.path.isdir(fullpath):
             return serve_directory(path)
-        else:
-            # If a specified path exists, dreamhost seems to serve the file directly without
-            # invoking this Flask application.
-            # As nonexistent paths are taken care of above, this else-branch is not expected to
-            # ever be called. It is left in as a
-            # stub though, in case this ever changes.
-            return serve_file(path)
+
+        # If a specified path exists, dreamhost seems to serve the file directly without
+        # invoking this Flask application.
+        # As nonexistent paths are taken care of above, this else-branch is not expected to
+        # ever be called. It is left in as a
+        # stub though, in case this ever changes.
+        return serve_file(path)
 
     def serve_directory(path):
         """
@@ -54,13 +55,12 @@ def create_app():
         if not path.endswith('/') and len(path) > 1:
             # Ensure paths always end with a "/"
             return flask.redirect('/' + path + '/')
-        else:
-            return flask.render_template(
-                    os.path.join(templatehelper.config['template'], 'directory.html'),
-                    pathprefix = pathprefix,
-                    path = path,
-                    templatehelper = templatehelper)
-    
+        return flask.render_template(
+                os.path.join(templatehelper.config['template'], 'directory.html'),
+                pathprefix = pathprefix,
+                path = path,
+                templatehelper = templatehelper)
+
     @app.route('/')
     def serve_root():
         """
@@ -74,8 +74,8 @@ def create_app():
                         __name__,
                         'templates',
                         templatehelper.config['template'],
-                        '%d.html' % (code))):
-            template = '%d.html' % (code)
+                        f'{code}.html')):
+            template = f'{code}.html'
         else:
             template = 'error.html'
         return flask.make_response((
