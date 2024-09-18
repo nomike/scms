@@ -49,18 +49,23 @@ body {
     color: white;
 }
 
+/* On screens that are less than 1081px wide, make the sidebar into a topbar */
 
-/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+@media screen {
+    /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
 
-div.content {
-    margin-top: 26px;
-    margin-left: 200px;
-    padding: 1px 16px;
-    padding-bottom: 25px;
+    div.content {
+        margin-top: 26px;
+        padding: 1px 16px;
+        padding-bottom: 25px;
+    }
 }
 
-
-/* On screens that are less than 1081px wide, make the sidebar into a topbar */
+@media screen and (min-width: 1081px) {
+    div.content{
+        margin-left: 200px;
+    }
+}
 
 @media screen and (max-width: 1080px) {
     .sidebar {
@@ -300,4 +305,14 @@ div.galleryblock img:hover {
 :not(pre)>code {
     background: lightgray;
     border: 1px solid gray;
+}
+
+@media print {
+    .sidebar, .footer, .powerline {
+        display: none;
+    }
+    
+    a::after{
+        content: " (" attr(href) ") ";
+    }    
 }
