@@ -163,7 +163,7 @@ def readfile(path, default=None):
     """
     if not os.path.exists(path) and default:
         return default
-    with open(path, 'rb') as requested_file:
+    with open(path, 'r', encoding=locale.getpreferredencoding()) as requested_file:
         return requested_file.read()
 
 def getfasicon(path):
