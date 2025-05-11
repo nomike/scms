@@ -12,7 +12,8 @@
         <a href="{{ templatehelper.urllib.parse.quote(link) }}" target="{{ templatehelper.readfile(templatehelper.os.path.join(path, name + '.scmstarget')) }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, name)) }}"></i> {{ name }}</a>        {% else %}
         <a href="{{ templatehelper.urllib.parse.quote(link) }}"><i class="fas {{ templatehelper.getfasicon(templatehelper.os.path.join(path, name)) }}"></i> {{ name }}</a> {% endif %} {% endfor %}
     </div>
-    {% endif -%} {% endblock -%} {% block content -%} {% if templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path,'index.md')) -%} {{ templatehelper.markdown.markdown(templatehelper.readfile(templatehelper.os.path.join(pathprefix,path,'index.md')),extensions=['fenced_code','toc','tables'])
-    | safe }} {% elif templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path, 'index')) -%} {{ templatehelper.readfile(templatehelper.os.path.join(pathprefix, path, 'index')) | safe -}} {% else -%}
+    {% endif -%} {% endblock -%} {% block content -%} {% if templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path,'index.org')) -%} {{ templatehelper.orgpython.to_html(templatehelper.readfile(templatehelper.os.path.join(pathprefix,path,'index.org')))
+    | safe }} {% elif templatehelper.os.path.isfile(templatehelper.os.path.join(pathprefix, path,'index.md')) -%} {{ templatehelper.markdown.markdown(templatehelper.readfile(templatehelper.os.path.join(pathprefix,path,'index.md')),extensions=['fenced_code','toc','tables'])
+    | safe }} {% else -%}
     <h1>/{{ path }}</h1>
     {% endif -%} {% if templatehelper.os.path.isdir(templatehelper.os.path.join(pathprefix, path, 'image')) %} {% include templatehelper.os.path.join(templatehelper.config['template'], 'gallery.html') %} {% endif %} {% endblock %}

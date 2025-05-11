@@ -24,6 +24,8 @@ import locale
 
 # pylint: disable=unused-import
 import markdown
+# pylint: disable=unused-import
+import orgpython
 import regex
 import yaml
 
@@ -80,7 +82,7 @@ def listdir(path):
     If a file named "index" is present, it is supposed to be rendered as the main content of the
     page and thus it will be ommited from the list as well.
     """
-    ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
+    ignorelist = ['index', 'index.md', 'index.org', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
         with open(
                 os.path.join(pathprefix, path, '.scmsignore'),
@@ -113,7 +115,7 @@ def listchildren(path):
     If a file named "index" is present, it is supposed to be rendered as the main content of the
     page and thus it will be ommited from the list as well.
     """
-    ignorelist = ['index', 'index.md', '*.scmsfasicon', '*.scmstarget']
+    ignorelist = ['index', 'index.md', 'index.org', '*.scmsfasicon', '*.scmstarget']
     if os.path.exists(os.path.join(pathprefix, path, '.scmsignore')):
         with open(
                 os.path.join(pathprefix, path, '.scmsignore'),
