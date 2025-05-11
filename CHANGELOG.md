@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [1.1.1](https://github.com/nomike/scms/releases/tag/1.1.1) - 2025-05-11
+
+<small>[Compare with v1.1.0](https://github.com/nomike/scms/compare/v1.1.0...1.1.1)</small>
+
+### Fixed
+
+- Fix detection and rendering of plain 'index' files ([3a3edd6](https://github.com/nomike/scms/commit/3a3edd6122d3a0ba5e92a270fb3f887b1fd180ce) by nomike).
+
 ## [1.1.0](https://github.com/nomike/scms/releases/tag/1.1.0) - 2025-05-11
 
 <small>[Compare with 1.0.0](https://github.com/nomike/scms/compare/1.0.0...1.1.0)</small>
