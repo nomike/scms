@@ -145,3 +145,15 @@ This template is used to render error pages (e.g. HTTP/404).
 Optionally you could create templates for specific erro codes. The name has
 to be [errorcode].html (e.g. '404.html'). If no specific error template is
 found, sscm falls back to 'error.html'.
+
+## Development
+
+### Versioning
+
+This project uses [EffVer](https://jacobtomlinson.dev/effver/).
+
+Version numbers are comprised of three parts: Macro, Meso, Micro.
+
+If the macro version is incremented, expect a lare effort when upgrading.
+Meso version increments are usually small changes, but may require some effort.
+Micro version increments are usually bugfixes or small changes, which should not require any effort when upgrading.
