@@ -131,7 +131,7 @@ def translate_claude(content, target_lang):
             messages=[{
                 "role": "user",
                 "content": (
-                    f"Translate this webpage content from English to {target_language}:\n\n"
+                    f"Translate this webpage content from English to {target_language}:\n\n",
                     content
                 )
             }]
