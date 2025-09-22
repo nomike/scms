@@ -93,7 +93,9 @@ def translate_claude(content, target_lang):
     Translate content using Claude API.
     """
     if not anthropic:
-        raise ImportError("anthropic package not installed. Please install with: pip install anthropic")
+        raise ImportError(
+            "anthropic package not installed. Please install with: pip install anthropic"
+        )
 
     if not config or 'claude' not in config:
         raise ValueError("Claude configuration not found in config.yaml")
@@ -123,15 +125,20 @@ def translate_claude(content, target_lang):
             model=claude_config.get('model', 'claude-3-5-sonnet-20241022'),
             max_tokens=claude_config.get('max_tokens', 4096),
             temperature=claude_config.get('temperature', 0.7),
-            system=claude_config.get('system_prompt', 'You are a helpful assistant for a content management system.'),
+            system=claude_config.get(
+                'system_prompt', 'You are a helpful assistant for a content management system.'
+            ),
             messages=[{
                 "role": "user",
-                "content": f"Translate this webpage content from English to {target_language}, maintaining the original formatting and tone:\n\n{content}"
+                "content": (
+                    f"Translate this webpage content from English to {target_language}, "
+                    f"maintaining the original formatting and tone:\n\n{content}"
+                )
             }]
         )
         return message.content[0].text
     except Exception as e:
-        raise RuntimeError(f"Translation failed: {str(e)}")
+        raise RuntimeError(f"Translation failed: {str(e)}") from e
 
 def get_content_hash(content):
     """Generate SHA256 hash of content."""
@@ -346,7 +353,9 @@ def renderIndexFile(path, lang='en'):
         md_path = os.path.join(full_path, 'index.md')
         if os.path.isfile(md_path):
             content = readfile(md_path)
-            rendered_content = markdown.markdown(content, extensions=['fenced_code', 'toc', 'tables'])
+            rendered_content = markdown.markdown(
+                content, extensions=['fenced_code', 'toc', 'tables']
+            )
         else:
             # Check for index.html file
             html_path = os.path.join(full_path, 'index.html')
@@ -387,6 +396,6 @@ def renderIndexFile(path, lang='en'):
         # Cache the translation
         cache_translation(content_hash, lang, translated_content)
         return translated_content
-    except Exception as e:
+    except (ImportError, ValueError, RuntimeError) as e:
         # If translation fails, return original content with error comment
         return f"<!-- Translation error: {str(e)} -->\n{rendered_content}"
