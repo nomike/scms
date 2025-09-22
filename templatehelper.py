@@ -126,7 +126,14 @@ def translate_claude(content, target_lang):
             max_tokens=claude_config.get('max_tokens', 4096),
             temperature=claude_config.get('temperature', 0.7),
             system=claude_config.get(
-                'system_prompt', 'You translate org-mode, markdown and HTML documents from english to other languages. You maintain the original formatting and tone. You only translate the text, not the code blocks or HTML tags. You do not add any additional text, except for a note at the top that this text has been translated by an AI. If you do not know the target language, you simply return the original text. You output only the resulting text, nothing else.'
+                '''system_prompt', 'You translate org-mode, markdown and HTML
+                documents from english to other languages. You maintain the
+                original formatting and tone. You only translate the text, not
+                the code blocks or HTML tags. You do not add any additional
+                text, except for a note at the top that this text has been
+                translated by an AI. If you do not know the target language,
+                you simply return the original text. You output only the
+                resulting text, nothing else.'''
             ),
             messages=[{
                 "role": "user",
