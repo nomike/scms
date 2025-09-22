@@ -110,12 +110,12 @@ def translate_claude(content, target_lang):
         base_url=claude_config.get('base_url', 'https://api.anthropic.com')
     )
 
-    # Language code to language name mapping
+    # Language code to language name mapping (ISO 639-3)
     lang_names = {
-        'de': 'German', 'fr': 'French', 'it': 'Italian', 'el': 'Greek',
-        'hu': 'Hungarian', 'pt': 'Portuguese', 'cs': 'Czech', 'sk': 'Slovakian',
-        'sl': 'Slovenian', 'hr': 'Croatian', 'de-ch': 'Swiss German',
-        'nl': 'Dutch', 'bg': 'Bulgarian'
+        'deu': 'German', 'fra': 'French', 'ita': 'Italian', 'ell': 'Greek',
+        'hun': 'Hungarian', 'por': 'Portuguese', 'ces': 'Czech', 'slk': 'Slovak',
+        'slv': 'Slovenian', 'hrv': 'Croatian', 'gsw': 'Swiss German',
+        'nld': 'Dutch', 'bul': 'Bulgarian', 'mnk': 'Mandinka'
     }
 
     target_language = lang_names.get(target_lang, target_lang)
@@ -382,11 +382,11 @@ def renderIndexFile(path, lang='en'):
     content_hash = get_content_hash(source_content)
 
     # Get the source content in the target language (translate if needed)
-    if lang == 'en':
+    if lang == 'eng':
         # Use original source content for English
         translated_source = source_content
         # Cache original English source
-        cache_translation(content_hash, 'en', source_content)
+        cache_translation(content_hash, 'eng', source_content)
     else:
         # Check if translation is already cached
         cached_translation = get_cached_translation(content_hash, lang)
@@ -394,7 +394,7 @@ def renderIndexFile(path, lang='en'):
             translated_source = cached_translation
         else:
             # Cache the original English source
-            cache_translation(content_hash, 'en', source_content)
+            cache_translation(content_hash, 'eng', source_content)
 
             # Translate source content using Claude
             try:
