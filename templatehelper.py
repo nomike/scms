@@ -12,9 +12,11 @@ Example:
 """
 
 import fnmatch
+import hashlib
 import json
 import mimetypes
 import os
+import pickle
 # pylint: disable=unused-import
 import re
 # pylint: disable=unused-import
@@ -29,6 +31,11 @@ import orgpython
 import regex
 import yaml
 
+try:
+    import anthropic
+except ImportError:
+    anthropic = None
+
 # pylint: disable=invalid-name
 config = None
 
@@ -40,6 +47,108 @@ with open("../config.yaml", encoding=locale.getpreferredencoding()) as file:
 # paths relative to the pages root directory.
 # pylint: disable=invalid-name
 pathprefix = ''
+
+def get_cache_dir():
+    """Get the cache directory from config or use default."""
+    if config and 'claude' in config and 'cache_dir' in config['claude']:
+        return config['claude']['cache_dir']
+    return os.path.join('.', 'cache', 'translations')
+
+def ensure_cache_dir():
+    """Ensure the cache directory exists."""
+    cache_dir = get_cache_dir()
+    if not os.path.exists(cache_dir):
+        os.makedirs(cache_dir, exist_ok=True)
+
+def get_cache_key(content_hash, target_lang):
+    """Generate a cache key from content hash and target language."""
+    return f"{content_hash}_{target_lang}.pkl"
+
+def get_cached_translation(content_hash, target_lang):
+    """Retrieve a translation from cache if it exists."""
+    ensure_cache_dir()
+    cache_dir = get_cache_dir()
+    cache_file = os.path.join(cache_dir, get_cache_key(content_hash, target_lang))
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'rb') as f:
+                return pickle.load(f)
+        except (IOError, pickle.PickleError):
+            pass
+    return None
+
+def cache_translation(content_hash, target_lang, translation):
+    """Store a translation in cache."""
+    ensure_cache_dir()
+    cache_dir = get_cache_dir()
+    cache_file = os.path.join(cache_dir, get_cache_key(content_hash, target_lang))
+    try:
+        with open(cache_file, 'wb') as f:
+            pickle.dump(translation, f)
+    except (IOError, pickle.PickleError):
+        pass
+
+def translate_claude(content, target_lang):
+    """
+    Translate content using Claude API.
+    """
+    if not anthropic:
+        raise ImportError("anthropic package not installed. Please install with: pip install anthropic")
+
+    if not config or 'claude' not in config:
+        raise ValueError("Claude configuration not found in config.yaml")
+
+    claude_config = config['claude']
+    api_key = claude_config.get('api_key')
+    if not api_key or api_key == "your_anthropic_api_key_here":
+        raise ValueError("Valid Claude API key not configured")
+
+    client = anthropic.Anthropic(
+        api_key=api_key,
+        base_url=claude_config.get('base_url', 'https://api.anthropic.com')
+    )
+
+    # Language code to language name mapping
+    lang_names = {
+        'de': 'German', 'fr': 'French', 'it': 'Italian', 'el': 'Greek',
+        'hu': 'Hungarian', 'pt': 'Portuguese', 'cs': 'Czech', 'sk': 'Slovakian',
+        'sl': 'Slovenian', 'hr': 'Croatian', 'de-ch': 'Swiss German',
+        'nl': 'Dutch', 'bg': 'Bulgarian'
+    }
+
+    target_language = lang_names.get(target_lang, target_lang)
+
+    try:
+        message = client.messages.create(
+            model=claude_config.get('model', 'claude-3-5-sonnet-20241022'),
+            max_tokens=claude_config.get('max_tokens', 4096),
+            temperature=claude_config.get('temperature', 0.7),
+            system=claude_config.get('system_prompt', 'You are a helpful assistant for a content management system.'),
+            messages=[{
+                "role": "user",
+                "content": f"Translate this webpage content from English to {target_language}, maintaining the original formatting and tone:\n\n{content}"
+            }]
+        )
+        return message.content[0].text
+    except Exception as e:
+        raise RuntimeError(f"Translation failed: {str(e)}")
+
+def get_content_hash(content):
+    """Generate SHA256 hash of content."""
+    return hashlib.sha256(content.encode('utf-8')).hexdigest()
+
+def is_claude_available():
+    """Check if Claude translation is available and properly configured."""
+    if not anthropic:
+        return False
+
+    if not config or 'claude' not in config:
+        return False
+
+    claude_config = config['claude']
+    api_key = claude_config.get('api_key')
+
+    return api_key and api_key != "your_anthropic_api_key_here"
 
 # List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml
 # If you want additional mimetypes to be covered, add them to this list.
@@ -216,3 +325,68 @@ def getlastmodifiedfile(path):
                 newest['file'] = os.path.join(root, directory)
                 newest['timestamp'] = timestamp
     return newest
+
+def renderIndexFile(path, lang='en'):
+    """
+    Search for index files in order of priority (index.org, index.md, index.html, index)
+    and render the appropriate content. Returns rendered HTML content or default header.
+    If lang is not 'en', attempts to translate content using Claude API with caching.
+    """
+    full_path = os.path.join(pathprefix, path)
+    content = None
+    rendered_content = None
+
+    # Check for index.org file
+    org_path = os.path.join(full_path, 'index.org')
+    if os.path.isfile(org_path):
+        content = readfile(org_path)
+        rendered_content = orgpython.to_html(content)
+    else:
+        # Check for index.md file
+        md_path = os.path.join(full_path, 'index.md')
+        if os.path.isfile(md_path):
+            content = readfile(md_path)
+            rendered_content = markdown.markdown(content, extensions=['fenced_code', 'toc', 'tables'])
+        else:
+            # Check for index.html file
+            html_path = os.path.join(full_path, 'index.html')
+            if os.path.isfile(html_path):
+                rendered_content = readfile(html_path)
+            else:
+                # Check for plain index file
+                index_path = os.path.join(full_path, 'index')
+                if os.path.isfile(index_path):
+                    rendered_content = readfile(index_path)
+                else:
+                    # Default fallback - return directory header
+                    rendered_content = f'<h1>/{path}</h1>'
+
+    # If language is English or no content to translate, return as-is
+    if lang == 'en' or not rendered_content:
+        return rendered_content
+
+    # Generate content hash for caching
+    content_hash = get_content_hash(rendered_content)
+
+    # Check cache first for English content (cache original English)
+    if lang == 'en':
+        cache_translation(content_hash, 'en', rendered_content)
+        return rendered_content
+
+    # Check if translation is already cached
+    cached_translation = get_cached_translation(content_hash, lang)
+    if cached_translation:
+        return cached_translation
+
+    # Cache the original English content
+    cache_translation(content_hash, 'en', rendered_content)
+
+    # Translate content using Claude
+    try:
+        translated_content = translate_claude(rendered_content, lang)
+        # Cache the translation
+        cache_translation(content_hash, lang, translated_content)
+        return translated_content
+    except Exception as e:
+        # If translation fails, return original content with error comment
+        return f"<!-- Translation error: {str(e)} -->\n{rendered_content}"

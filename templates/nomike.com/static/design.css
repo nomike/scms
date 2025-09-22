@@ -290,8 +290,10 @@ div.galleryblock img:hover {
 
 .footer {
     display: flex;
-    justify-content: left;
+    justify-content: space-between;
+    align-items: center;
     padding-left: 10px;
+    padding-right: 10px;
     padding-top: 3px;
     padding-bottom: 3px;
     margin-top: 0;
@@ -300,6 +302,56 @@ div.galleryblock img:hover {
     bottom: 0px;
     width: 100%;
     height: 20px;
+    box-sizing: border-box;
+}
+
+.footer-left {
+    flex: 1;
+}
+
+.footer-right {
+    flex-shrink: 0;
+}
+
+.language-dropdown {
+    background-color: transparent;
+    border: 1px solid #333;
+    border-radius: 3px;
+    font-size: 12px;
+    height: 18px;
+    padding: 1px 3px;
+    color: black;
+}
+
+.language-dropdown:focus {
+    outline: none;
+    border-color: #666;
+}
+
+.language-form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.language-submit {
+    background-color: transparent;
+    border: 1px solid #333;
+    border-radius: 3px;
+    font-size: 12px;
+    height: 20px;
+    padding: 1px 6px;
+    color: black;
+    cursor: pointer;
+}
+
+.language-submit:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.language-submit:focus {
+    outline: none;
+    border-color: #666;
 }
 
 :not(pre)>code {

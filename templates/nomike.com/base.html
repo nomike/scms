@@ -24,6 +24,14 @@
 
         /* Initialize highlight.js */
         hljs.initHighlightingOnLoad();
+
+        /* Handle language dropdown change */
+        function handleLanguageChange(select) {
+            const selectedLang = select.value;
+            const url = new URL(window.location);
+            url.searchParams.set('lang', selectedLang);
+            window.location.href = url.toString();
+        }
     </script>
 </head>
 
@@ -39,8 +47,34 @@
         <p>&nbsp;</p>
     </div>
     <div class="footer">
-        {% set lastmodifiedfile = templatehelper.getlastmodifiedfile(templatehelper.os.path.join(path)) %} Last modification in {{ lastmodifiedfile['file'] }} on {{ templatehelper.datetime.fromtimestamp(lastmodifiedfile['timestamp'], tz=templatehelper.timezone.utc).isoformat()
-        }}
+        <div class="footer-left">
+            {% set lastmodifiedfile = templatehelper.getlastmodifiedfile(templatehelper.os.path.join(path)) %} Last modification in {{ lastmodifiedfile['file'] }} on {{ templatehelper.datetime.fromtimestamp(lastmodifiedfile['timestamp'], tz=templatehelper.timezone.utc).isoformat()
+            }}
+        </div>
+        <div class="footer-right">
+            {% if templatehelper.is_claude_available() %}
+            <form method="get" class="language-form">
+                {% set current_lang = request.args.get('lang', 'en') %}
+                <select class="language-dropdown" name="lang" onchange="handleLanguageChange(this)">
+                    <option value="bg"{% if current_lang == 'bg' %} selected{% endif %}>Bulgarian</option>
+                    <option value="hr"{% if current_lang == 'hr' %} selected{% endif %}>Croatian</option>
+                    <option value="cs"{% if current_lang == 'cs' %} selected{% endif %}>Czech</option>
+                    <option value="nl"{% if current_lang == 'nl' %} selected{% endif %}>Dutch</option>
+                    <option value="en"{% if current_lang == 'en' %} selected{% endif %}>English</option>
+                    <option value="fr"{% if current_lang == 'fr' %} selected{% endif %}>French</option>
+                    <option value="de"{% if current_lang == 'de' %} selected{% endif %}>German</option>
+                    <option value="de-ch"{% if current_lang == 'de-ch' %} selected{% endif %}>German (Swiss)</option>
+                    <option value="el"{% if current_lang == 'el' %} selected{% endif %}>Greek</option>
+                    <option value="hu"{% if current_lang == 'hu' %} selected{% endif %}>Hungarian</option>
+                    <option value="it"{% if current_lang == 'it' %} selected{% endif %}>Italian</option>
+                    <option value="pt"{% if current_lang == 'pt' %} selected{% endif %}>Portuguese</option>
+                    <option value="sk"{% if current_lang == 'sk' %} selected{% endif %}>Slovakian</option>
+                    <option value="sl"{% if current_lang == 'sl' %} selected{% endif %}>Slovenian</option>
+                </select>
+                <button type="submit" class="language-submit">Go</button>
+            </form>
+            {% endif %}
+        </div>
     </div>
 </body>
 
