@@ -344,65 +344,77 @@ def renderIndexFile(path, lang='en'):
     """
     Search for index files in order of priority (index.org, index.md, index.html, index)
     and render the appropriate content. Returns rendered HTML content or default header.
-    If lang is not 'en', attempts to translate content using Claude API with caching.
+    If lang is not 'en', attempts to translate source content using Claude API with caching,
+    then renders the translated source.
     """
     full_path = os.path.join(pathprefix, path)
-    content = None
-    rendered_content = None
+    source_content = None
+    file_type = None
 
     # Check for index.org file
     org_path = os.path.join(full_path, 'index.org')
     if os.path.isfile(org_path):
-        content = readfile(org_path)
-        rendered_content = orgpython.to_html(content)
+        source_content = readfile(org_path)
+        file_type = 'org'
     else:
         # Check for index.md file
         md_path = os.path.join(full_path, 'index.md')
         if os.path.isfile(md_path):
-            content = readfile(md_path)
-            rendered_content = markdown.markdown(
-                content, extensions=['fenced_code', 'toc', 'tables']
-            )
+            source_content = readfile(md_path)
+            file_type = 'md'
         else:
             # Check for index.html file
             html_path = os.path.join(full_path, 'index.html')
             if os.path.isfile(html_path):
-                rendered_content = readfile(html_path)
+                source_content = readfile(html_path)
+                file_type = 'html'
             else:
                 # Check for plain index file
                 index_path = os.path.join(full_path, 'index')
                 if os.path.isfile(index_path):
-                    rendered_content = readfile(index_path)
+                    source_content = readfile(index_path)
+                    file_type = 'plain'
                 else:
                     # Default fallback - return directory header
-                    rendered_content = f'<h1>/{path}</h1>'
+                    return f'<h1>/{path}</h1>'
 
-    # If language is English or no content to translate, return as-is
-    if lang == 'en' or not rendered_content:
-        return rendered_content
+    # Generate content hash for caching (based on source content)
+    content_hash = get_content_hash(source_content)
 
-    # Generate content hash for caching
-    content_hash = get_content_hash(rendered_content)
-
-    # Check cache first for English content (cache original English)
+    # Get the source content in the target language (translate if needed)
     if lang == 'en':
-        cache_translation(content_hash, 'en', rendered_content)
-        return rendered_content
+        # Use original source content for English
+        translated_source = source_content
+        # Cache original English source
+        cache_translation(content_hash, 'en', source_content)
+    else:
+        # Check if translation is already cached
+        cached_translation = get_cached_translation(content_hash, lang)
+        if cached_translation:
+            translated_source = cached_translation
+        else:
+            # Cache the original English source
+            cache_translation(content_hash, 'en', source_content)
 
-    # Check if translation is already cached
-    cached_translation = get_cached_translation(content_hash, lang)
-    if cached_translation:
-        return cached_translation
+            # Translate source content using Claude
+            try:
+                translated_source = translate_claude(source_content, lang)
+                # Cache the translated source
+                cache_translation(content_hash, lang, translated_source)
+            except (ImportError, ValueError, RuntimeError) as e:
+                # If translation fails, use original content with error comment
+                translated_source = f"<!-- Translation error: {str(e)} -->\n{source_content}"
 
-    # Cache the original English content
-    cache_translation(content_hash, 'en', rendered_content)
-
-    # Translate content using Claude
-    try:
-        translated_content = translate_claude(rendered_content, lang)
-        # Cache the translation
-        cache_translation(content_hash, lang, translated_content)
-        return translated_content
-    except (ImportError, ValueError, RuntimeError) as e:
-        # If translation fails, return original content with error comment
-        return f"<!-- Translation error: {str(e)} -->\n{rendered_content}"
+    # Now render the (possibly translated) source content based on file type
+    if file_type == 'org':
+        return orgpython.to_html(translated_source)
+    elif file_type == 'md':
+        return markdown.markdown(
+            translated_source, extensions=['fenced_code', 'toc', 'tables']
+        )
+    elif file_type == 'html':
+        return translated_source
+    elif file_type == 'plain':
+        return translated_source
+    else:
+        return f'<h1>/{path}</h1>'
