@@ -115,7 +115,8 @@ def translate_claude(content, target_lang):
         'deu': 'German', 'fra': 'French', 'ita': 'Italian', 'ell': 'Greek',
         'hun': 'Hungarian', 'por': 'Portuguese', 'ces': 'Czech', 'slk': 'Slovak',
         'slv': 'Slovenian', 'hrv': 'Croatian', 'gsw': 'Swiss German',
-        'nld': 'Dutch', 'bul': 'Bulgarian', 'mnk': 'Mandinka'
+        'nld': 'Dutch', 'bul': 'Bulgarian', 'mnk': 'Mandinka',
+        'jpn': 'Japanese', 'rus': 'Russian'
     }
 
     target_language = lang_names.get(target_lang, target_lang)
