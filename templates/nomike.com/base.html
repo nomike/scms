@@ -167,6 +167,7 @@
 
                     <!-- Native select (fallback when JS disabled) -->
                     <select class="language-dropdown" name="lang" onchange="handleLanguageChange(this)">
+                        <option value="afr"{% if current_lang == 'afr' %} selected{% endif %}>Afrikaans</option>
                         <option value="ara"{% if current_lang == 'ara' %} selected{% endif %}>Arabic</option>
                         <option value="bul"{% if current_lang == 'bul' %} selected{% endif %}>Bulgarian</option>
                         <option value="hrv"{% if current_lang == 'hrv' %} selected{% endif %}>Croatian</option>
