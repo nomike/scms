@@ -3,3 +3,4 @@ markdown
 org-python
 pyyaml
 regex
+anthropic

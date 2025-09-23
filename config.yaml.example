@@ -1,2 +1,28 @@
 template: "nomike.com"
 #template: "custom/example_template"
+
+# Claude AI Configuration
+claude:
+  # Your Anthropic API key
+  api_key: "your_anthropic_api_key_here"
+
+  # Claude model to use (e.g., claude-3-5-sonnet-20241022, claude-3-haiku-20240307)
+  model: "claude-3-5-sonnet-20241022"
+
+  # Maximum tokens for Claude responses
+  max_tokens: 4096
+
+  # Temperature for response randomness (0.0 to 1.0)
+  temperature: 0.7
+
+  # System prompt for Claude (optional)
+  system_prompt: "You are a helpful assistant for a content management system."
+
+  # API base URL (leave default unless using a proxy)
+  base_url: "https://api.anthropic.com"
+
+  # Request timeout in seconds
+  timeout: 30
+
+  # Cache directory for translations (relative to project root)
+  cache_dir: "./cache/translations"
