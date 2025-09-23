@@ -1,6 +1,7 @@
 {% if not templatehelper.os.path.exists(templatehelper.os.path.join(path, '.scmsnotemplate')): -%}
 <!DOCTYPE html>
-<html lang="en">
+{% set current_lang = request.args.get('lang', 'eng') %}
+<html lang="{{ 'ar' if current_lang == 'ara' else 'en' }}" dir="{{ 'rtl' if current_lang == 'ara' else 'ltr' }}">
 
 <head>
     <title>{% block title %}{% endblock %} - {{ templatehelper.urllib.parse.urlparse(request.url_root).netloc }}</title>
@@ -54,8 +55,8 @@
         <div class="footer-right">
             {% if templatehelper.is_claude_available() %}
             <form method="get" class="language-form">
-                {% set current_lang = request.args.get('lang', 'eng') %}
                 <select class="language-dropdown" name="lang" onchange="handleLanguageChange(this)">
+                    <option value="ara"{% if current_lang == 'ara' %} selected{% endif %}>Arabic</option>
                     <option value="bul"{% if current_lang == 'bul' %} selected{% endif %}>Bulgarian</option>
                     <option value="hrv"{% if current_lang == 'hrv' %} selected{% endif %}>Croatian</option>
                     <option value="ces"{% if current_lang == 'ces' %} selected{% endif %}>Czech</option>

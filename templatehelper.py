@@ -112,7 +112,7 @@ def translate_claude(content, target_lang):
 
     # Language code to language name mapping (ISO 639-3)
     lang_names = {
-        'deu': 'German', 'fra': 'French', 'ita': 'Italian', 'ell': 'Greek',
+        'ara': 'Arabic', 'deu': 'German', 'fra': 'French', 'ita': 'Italian', 'ell': 'Greek',
         'hun': 'Hungarian', 'por': 'Portuguese', 'ces': 'Czech', 'slk': 'Slovak',
         'slv': 'Slovenian', 'hrv': 'Croatian', 'gsw': 'Swiss German',
         'nld': 'Dutch', 'bul': 'Bulgarian', 'mnk': 'Mandinka',

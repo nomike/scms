@@ -359,12 +359,80 @@ div.galleryblock img:hover {
     border: 1px solid gray;
 }
 
+/* RTL Support for Arabic and other right-to-left languages */
+[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .sidebar {
+    right: 0;
+    left: auto;
+}
+
+[dir="rtl"] .sidebar a {
+    text-align: right;
+}
+
+[dir="rtl"] div.galleryblock {
+    float: right;
+}
+
+[dir="rtl"] .sidebar a.icon {
+    float: left;
+}
+
+[dir="rtl"] .previous {
+    right: 35px;
+    left: auto;
+}
+
+[dir="rtl"] .next {
+    left: 35px;
+    right: auto;
+}
+
+[dir="rtl"] .close {
+    left: 35px;
+    right: auto;
+}
+
+@media screen and (min-width: 1081px) {
+    [dir="rtl"] div.content {
+        margin-right: 200px;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 1080px) {
+    [dir="rtl"] .sidebar.responsive a.icon {
+        left: 0;
+        right: auto;
+    }
+
+    [dir="rtl"] .sidebar.responsive a {
+        text-align: right;
+    }
+
+    [dir="rtl"] .sidebar a.icon {
+        float: left;
+    }
+}
+
+[dir="rtl"] .footer {
+    direction: rtl;
+}
+
+[dir="rtl"] .language-form {
+    flex-direction: row-reverse;
+}
+
 @media print {
     .sidebar, .footer, .powerline {
         display: none;
     }
-    
+
     a::after{
         content: " (" attr(href) ") ";
-    }    
+    }
 }
