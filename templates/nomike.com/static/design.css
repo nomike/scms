@@ -313,6 +313,7 @@ div.galleryblock img:hover {
     flex-shrink: 0;
 }
 
+/* Language dropdown - base styles (no JS fallback) */
 .language-dropdown {
     background-color: transparent;
     border: 1px solid #333;
@@ -352,6 +353,91 @@ div.galleryblock img:hover {
 .language-submit:focus {
     outline: none;
     border-color: #666;
+}
+
+/* Searchable dropdown styles (JS enabled) */
+.language-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.language-dropdown-container .language-search {
+    background-color: transparent;
+    border: 1px solid #333;
+    border-radius: 3px;
+    font-size: 12px;
+    height: 16px;
+    padding: 1px 3px;
+    color: black;
+    width: 120px;
+    cursor: pointer;
+}
+
+.language-dropdown-container .language-search:focus {
+    outline: none;
+    border-color: #666;
+    cursor: text;
+}
+
+.language-dropdown-container .language-options {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #333;
+    border-radius: 3px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.language-dropdown-container.open .language-options {
+    display: block;
+}
+
+.language-option {
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.language-option:last-child {
+    border-bottom: none;
+}
+
+.language-option:hover,
+.language-option.highlighted {
+    background-color: #f0f0f0;
+}
+
+.language-option.selected {
+    background-color: #ff9900;
+    color: black;
+}
+
+/* Hide native select when JS is enabled */
+.language-dropdown-container.js-enabled .language-dropdown {
+    display: none;
+}
+
+/* Show search input only when JS is enabled */
+.language-dropdown-container:not(.js-enabled) .language-search,
+.language-dropdown-container:not(.js-enabled) .language-options {
+    display: none;
+}
+
+/* RTL support for searchable dropdown */
+[dir="rtl"] .language-dropdown-container .language-options {
+    right: 0;
+    left: auto;
+}
+
+[dir="rtl"] .language-option {
+    text-align: right;
 }
 
 :not(pre)>code {

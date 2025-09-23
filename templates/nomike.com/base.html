@@ -33,6 +33,109 @@
             url.searchParams.set('lang', selectedLang);
             window.location.href = url.toString();
         }
+
+        /* Searchable dropdown functionality */
+        function initSearchableDropdown() {
+            const container = document.querySelector('.language-dropdown-container');
+            const select = document.querySelector('.language-dropdown');
+            const searchInput = document.querySelector('.language-search');
+            const optionsList = document.querySelector('.language-options');
+
+            if (!container || !select || !searchInput || !optionsList) return;
+
+            // Show custom dropdown, hide native select
+            container.classList.add('js-enabled');
+
+            // Populate options list from select element
+            Array.from(select.options).forEach(option => {
+                const div = document.createElement('div');
+                div.className = 'language-option';
+                div.textContent = option.textContent;
+                div.dataset.value = option.value;
+                if (option.selected) {
+                    div.classList.add('selected');
+                    searchInput.placeholder = option.textContent;
+                }
+                optionsList.appendChild(div);
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                const filter = this.value.toLowerCase();
+                const options = optionsList.querySelectorAll('.language-option');
+
+                options.forEach(option => {
+                    const text = option.textContent.toLowerCase();
+                    option.style.display = text.includes(filter) ? 'block' : 'none';
+                });
+            });
+
+            // Option selection
+            optionsList.addEventListener('click', function(e) {
+                if (e.target.classList.contains('language-option')) {
+                    // Update select value
+                    select.value = e.target.dataset.value;
+
+                    // Update UI
+                    optionsList.querySelectorAll('.language-option').forEach(opt =>
+                        opt.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                    searchInput.value = '';
+                    searchInput.placeholder = e.target.textContent;
+
+                    // Hide dropdown
+                    container.classList.remove('open');
+
+                    // Trigger change
+                    handleLanguageChange(select);
+                }
+            });
+
+            // Toggle dropdown
+            searchInput.addEventListener('click', function() {
+                container.classList.toggle('open');
+                this.focus();
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!container.contains(e.target)) {
+                    container.classList.remove('open');
+                    searchInput.value = '';
+                }
+            });
+
+            // Handle keyboard navigation
+            searchInput.addEventListener('keydown', function(e) {
+                const options = Array.from(optionsList.querySelectorAll('.language-option'))
+                    .filter(opt => opt.style.display !== 'none');
+                const highlighted = optionsList.querySelector('.language-option.highlighted');
+                let currentIndex = highlighted ? options.indexOf(highlighted) : -1;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (highlighted) highlighted.classList.remove('highlighted');
+                    currentIndex = Math.min(currentIndex + 1, options.length - 1);
+                    if (options[currentIndex]) options[currentIndex].classList.add('highlighted');
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (highlighted) highlighted.classList.remove('highlighted');
+                    currentIndex = Math.max(currentIndex - 1, 0);
+                    if (options[currentIndex]) options[currentIndex].classList.add('highlighted');
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (highlighted) {
+                        highlighted.click();
+                    }
+                } else if (e.key === 'Escape') {
+                    container.classList.remove('open');
+                    searchInput.value = '';
+                }
+            });
+        }
+
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', initSearchableDropdown);
     </script>
 </head>
 
@@ -55,27 +158,36 @@
         <div class="footer-right">
             {% if templatehelper.is_claude_available() %}
             <form method="get" class="language-form">
-                <select class="language-dropdown" name="lang" onchange="handleLanguageChange(this)">
-                    <option value="ara"{% if current_lang == 'ara' %} selected{% endif %}>Arabic</option>
-                    <option value="bul"{% if current_lang == 'bul' %} selected{% endif %}>Bulgarian</option>
-                    <option value="hrv"{% if current_lang == 'hrv' %} selected{% endif %}>Croatian</option>
-                    <option value="ces"{% if current_lang == 'ces' %} selected{% endif %}>Czech</option>
-                    <option value="nld"{% if current_lang == 'nld' %} selected{% endif %}>Dutch</option>
-                    <option value="eng"{% if current_lang == 'eng' %} selected{% endif %}>English</option>
-                    <option value="fra"{% if current_lang == 'fra' %} selected{% endif %}>French</option>
-                    <option value="deu"{% if current_lang == 'deu' %} selected{% endif %}>German</option>
-                    <option value="gsw"{% if current_lang == 'gsw' %} selected{% endif %}>German (Swiss)</option>
-                    <option value="ell"{% if current_lang == 'ell' %} selected{% endif %}>Greek</option>
-                    <option value="hun"{% if current_lang == 'hun' %} selected{% endif %}>Hungarian</option>
-                    <option value="ita"{% if current_lang == 'ita' %} selected{% endif %}>Italian</option>
-                    <option value="jpn"{% if current_lang == 'jpn' %} selected{% endif %}>Japanese</option>
-                    <option value="mnk"{% if current_lang == 'mnk' %} selected{% endif %}>Mandinka</option>
-                    <option value="por"{% if current_lang == 'por' %} selected{% endif %}>Portuguese</option>
-                    <option value="rus"{% if current_lang == 'rus' %} selected{% endif %}>Russian</option>
-                    <option value="gla"{% if current_lang == 'gla' %} selected{% endif %}>Scottish Gaelic</option>
-                    <option value="slk"{% if current_lang == 'slk' %} selected{% endif %}>Slovak</option>
-                    <option value="slv"{% if current_lang == 'slv' %} selected{% endif %}>Slovenian</option>
-                </select>
+                <div class="language-dropdown-container">
+                    <!-- Searchable input (hidden when JS disabled) -->
+                    <input type="text" class="language-search" placeholder="Select language..." readonly>
+
+                    <!-- Options list (hidden when JS disabled) -->
+                    <div class="language-options"></div>
+
+                    <!-- Native select (fallback when JS disabled) -->
+                    <select class="language-dropdown" name="lang" onchange="handleLanguageChange(this)">
+                        <option value="ara"{% if current_lang == 'ara' %} selected{% endif %}>Arabic</option>
+                        <option value="bul"{% if current_lang == 'bul' %} selected{% endif %}>Bulgarian</option>
+                        <option value="hrv"{% if current_lang == 'hrv' %} selected{% endif %}>Croatian</option>
+                        <option value="ces"{% if current_lang == 'ces' %} selected{% endif %}>Czech</option>
+                        <option value="nld"{% if current_lang == 'nld' %} selected{% endif %}>Dutch</option>
+                        <option value="eng"{% if current_lang == 'eng' %} selected{% endif %}>English</option>
+                        <option value="fra"{% if current_lang == 'fra' %} selected{% endif %}>French</option>
+                        <option value="deu"{% if current_lang == 'deu' %} selected{% endif %}>German</option>
+                        <option value="gsw"{% if current_lang == 'gsw' %} selected{% endif %}>German (Swiss)</option>
+                        <option value="ell"{% if current_lang == 'ell' %} selected{% endif %}>Greek</option>
+                        <option value="hun"{% if current_lang == 'hun' %} selected{% endif %}>Hungarian</option>
+                        <option value="ita"{% if current_lang == 'ita' %} selected{% endif %}>Italian</option>
+                        <option value="jpn"{% if current_lang == 'jpn' %} selected{% endif %}>Japanese</option>
+                        <option value="mnk"{% if current_lang == 'mnk' %} selected{% endif %}>Mandinka</option>
+                        <option value="por"{% if current_lang == 'por' %} selected{% endif %}>Portuguese</option>
+                        <option value="rus"{% if current_lang == 'rus' %} selected{% endif %}>Russian</option>
+                        <option value="gla"{% if current_lang == 'gla' %} selected{% endif %}>Scottish Gaelic</option>
+                        <option value="slk"{% if current_lang == 'slk' %} selected{% endif %}>Slovak</option>
+                        <option value="slv"{% if current_lang == 'slv' %} selected{% endif %}>Slovenian</option>
+                    </select>
+                </div>
                 <button type="submit" class="language-submit">Go</button>
             </form>
             {% endif %}
